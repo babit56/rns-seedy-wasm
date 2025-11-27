@@ -1,0 +1,32 @@
+@import 'open-props/style';
+@import 'open-props/normalize';
+@import 'open-props/theme.light.switch.min.css';
+@import 'open-props/theme.dark.switch.min.css';
+
+* {
+	box-sizing: border-box;
+}
+
+:root {
+}
+
+html {
+}
+
+body {
+	margin: 0;
+}
+
+header,
+main {
+	padding: 1rem;
+	max-width: 1060px;
+	margin-inline: auto;
+}
+
+ul {
+	padding-inline-start: 28px;
+}
+li {
+	max-inline-size: unset;
+}

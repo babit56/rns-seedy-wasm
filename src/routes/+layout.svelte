@@ -8,10 +8,11 @@
 
 <svelte:head>
 	<link rel="icon" href={favicon} />
+	<title>RnS Seedy</title>
 </svelte:head>
 
 <header>
-	<h1>RNS Seedy</h1>
+	<h1>RnS Seedy</h1>
 	<LightDarkSwitcher />
 </header>
 <main>

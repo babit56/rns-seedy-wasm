@@ -1,4 +1,4 @@
-import { id_to_gem, id_to_gem_key, id_to_name, id_to_potion } from './item-map';
+import { area_to_name, id_to_gem, id_to_gem_key, id_to_name, id_to_potion } from './item-map';
 
 type Shop = {
 	potions: { name: string; price: number }[];
@@ -16,22 +16,9 @@ export class Seed {
 	shops: Shop[];
 	areas: string[];
 
-	private areaMap = {
-		hw_nest: "Scholar's Nest",
-		hw_arsenal: "King's Aresenal",
-		hw_lighthouse: 'Red Darkhouse',
-		hw_streets: 'Churchmouse Streets',
-		hw_lakeside: 'Emerald Lakeside'
-	};
-
 	constructor(seed: Array<string | number>) {
 		this.id = <number>seed[0];
-		this.areas = [0, 1, 2, 3, 4]
-			.map((i) => (<string[]>seed)[i + 1])
-			.map((area) =>
-				// Use map or fallback to showing debug name
-				area in this.areaMap ? this.areaMap[area as keyof typeof this.areaMap] : area
-			);
+		this.areas = [0, 1, 2, 3, 4].map((i) => (<string[]>seed)[i + 1]);
 		this.chests = [0, 1, 2, 3, 4, 5].map((i) =>
 			(<number[]>seed).slice(i * 5 + 6, i * 5 + 11).map((id) => ({ id, name: id_to_name(id) }))
 		);
@@ -56,5 +43,13 @@ export class Seed {
 
 	shop(index: number): Shop | undefined {
 		return this.shops.at(index);
+	}
+
+	areaName(index: number): string {
+		return this.areas[index];
+	}
+
+	areaTitle(index: number): string {
+		return area_to_name(this.areas[index]);
 	}
 }

@@ -154,10 +154,7 @@
 		</div>
 	</section>
 </div>
-
-<hr />
-
-<h2>Results ({found_seeds.length})</h2>
+<h2 class="results">Results ({found_seeds.length})</h2>
 {#if found_seeds.length > 0}
 	<div class="seed-list">
 		{#each found_seeds as seed}
@@ -227,5 +224,9 @@
 	.button-group {
 		display: flex;
 		gap: 1rem;
+	}
+
+	.results {
+		margin-top: 1em;
 	}
 </style>

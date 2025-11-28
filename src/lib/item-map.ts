@@ -897,3 +897,33 @@ const itemIconMap = new Map(
 export function id_to_icon(id: number): string {
 	return itemIconMap.get(String(id)) ?? 'ERROR_ICON';
 }
+
+const areaMap = {
+	hw_nest: "Scholar's Nest",
+	hw_arsenal: "King's Aresenal",
+	hw_lighthouse: 'Red Darkhouse',
+	hw_streets: 'Churchmouse Streets',
+	hw_lakeside: 'Emerald Lakeside',
+	extra_outskirts: 'Kingdom Outskirts',
+	extra_pale_keep: 'Moonlit Prescipice'
+};
+
+export function area_to_name(area: string): string {
+	if (!(area in areaMap)) return 'ERROR_AREA';
+	return areaMap[area as keyof typeof areaMap];
+}
+
+const areaIconMap = {
+	hw_nest: "Area_Scholar's_Nest",
+	hw_arsenal: "Area_King's_Arsenal",
+	hw_lighthouse: 'Area_Red_Darkhouse',
+	hw_streets: 'Area_Churchmouse_Streets',
+	hw_lakeside: 'Area_Emerald_Lakeside',
+	extra_outskirts: 'Area_Kingdom_Outskirts',
+	extra_pale_keep: 'Area_The_Pale_Keep'
+};
+
+export function area_to_icon(area: string): string {
+	if (!(area in areaIconMap)) return 'ERROR_ICON';
+	return areaIconMap[area as keyof typeof areaIconMap];
+}

@@ -24,6 +24,7 @@ html {
 	--_g: 35.36% 35.36% at;
 	--_c: #0000 66%, var(--c2) 68% 70%, #0000 72%;
 	background:
+		radial-gradient(farthest-corner, #0000, #0000 60%, #00000004 80%, #0000000a) fixed,
 		radial-gradient(var(--_g) 100% 25%, var(--_c)) var(--s) var(--s) / var(--_s),
 		radial-gradient(var(--_g) 0 75%, var(--_c)) var(--s) var(--s) / var(--_s),
 		radial-gradient(var(--_g) 100% 25%, var(--_c)) 0 0 / var(--_s),

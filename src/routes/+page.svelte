@@ -26,7 +26,6 @@
 
 	function get_seed_data() {
 		const matched_seeds = seed_data.filter((seed: Array<string | number>) => {
-			if (seed[0] === 0) return true;
 			// Match first 5 items
 			const all_items_match =
 				seed[6] === item_1_id &&
@@ -74,7 +73,6 @@
 		value: item,
 		label: item
 	}));
-	console.log(items, gems);
 </script>
 
 <h2 class="page-title">Seed-In-Progress finder</h2>

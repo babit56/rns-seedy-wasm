@@ -1,20 +1,9 @@
-# sv
+# RnS Seedy
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A tool to figure out what seed you're on in Rabbit and Steel. Currently only supports Hard/Lunar runs because of RNG
+related details.
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
-
-```sh
-# create a new project in the current directory
-npx sv create
-
-# create a new project in my-app
-npx sv create my-app
-```
-
-## Developing
+## Local Development
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
 
@@ -35,4 +24,4 @@ npm run build
 
 You can preview the production build with `npm run preview`.
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+The current adapter is set up to be statically hosted over GitHub Pages.

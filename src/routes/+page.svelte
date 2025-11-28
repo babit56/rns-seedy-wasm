@@ -185,7 +185,7 @@
 	.columns {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-		column-gap: 1rem;
+		column-gap: 2rem;
 	}
 
 	.input-area {

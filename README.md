@@ -7,7 +7,9 @@ This is just the source code. To use this, go to [the website](https://fireisgoo
 
 ## Local Development
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+In case you want to make changes to this tool, you can clone this project and run it locally.
+
+First, instal dependencies with `npm install` (or `pnpm install` or `yarn`). Then, you can start a development server:
 
 ```sh
 npm run dev
@@ -27,3 +29,15 @@ npm run build
 You can preview the production build with `npm run preview`.
 
 The current adapter is set up to be statically hosted over GitHub Pages.
+
+## Contributing
+
+Fork this repo and make pull requests to the main branch.
+
+## Copyright
+
+The website is [MIT](https://choosealicense.com/licenses/mit/)
+
+Rabbit & Steel is &copy; mino_dev
+
+This project is unaffiliated with Rabbit & Steel's creators/distributors

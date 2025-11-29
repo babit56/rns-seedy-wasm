@@ -22,6 +22,17 @@
 <main>
 	{@render children()}
 </main>
+<footer>
+	<ul class="info">
+		<li>Made by FireIsGood</li>
+		<li>Seed data derived by members of the mino_dev Official Discord</li>
+		<li><a href="https://github.com/FireIsGood/rns-seedy">source code</a></li>
+	</ul>
+	<ul>
+		<li>Rabbit &amp; Steel is &copy; mino_dev</li>
+		<li>This project is unaffiliated with Rabbit &amp; Steel's creators/distributors</li>
+	</ul>
+</footer>
 
 <style>
 	header {
@@ -31,6 +42,27 @@
 
 		h1 {
 			font-size: 2rem;
+		}
+	}
+
+	footer ul {
+		display: flex;
+		gap: var(--size-2);
+		justify-content: center;
+		padding: 0;
+		list-style: none;
+		font-size: var(--font-size-1);
+		text-align: center;
+		color: var(--text-2);
+
+		& li {
+			display: inline-block;
+			padding: 0;
+
+			&:not(:last-child)::after {
+				content: '\00b7';
+				padding-inline-start: var(--size-2);
+			}
 		}
 	}
 </style>

@@ -3,6 +3,8 @@
 A tool to figure out what seed you're on in Rabbit and Steel. Currently only supports Hard/Lunar runs because of RNG
 related details.
 
+This is just the source code. To use this, go to [the website](https://fireisgood.github.io/rns-seedy/).
+
 ## Local Development
 
 Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:

@@ -949,6 +949,17 @@ export function id_to_icon(id: number): string {
 	return itemIconMap.get(String(id)) ?? 'ERROR_ICON';
 }
 
+export type AreaName = [
+	'hw_nest',
+	'hw_arsenal',
+	'hw_lighthouse',
+	'hw_streets',
+	'hw_lakeside',
+	'extra_pale_keep'
+][number];
+
+export type GemName = ['white', 'opal', 'sapphire', 'ruby', 'garnet', 'emerald'][number];
+
 const areaMap = {
 	hw_nest: "Scholar's Nest",
 	hw_arsenal: "King's Aresenal",
@@ -971,10 +982,38 @@ const areaIconMap = {
 	hw_streets: 'Area_Churchmouse_Streets',
 	hw_lakeside: 'Area_Emerald_Lakeside',
 	extra_outskirts: 'Area_Kingdom_Outskirts',
-	extra_pale_keep: 'Area_The_Pale_Keep'
+	extra_pale_keep: 'Area_The_Pale_Keep',
+	extra_moonlit_prescipice: 'Area_Moonlit_Pinnacle'
 };
 
 export function area_to_icon(area: string): string {
 	if (!(area in areaIconMap)) return 'ERROR_ICON';
 	return areaIconMap[area as keyof typeof areaIconMap];
+}
+
+const areaColorMap: Record<AreaName, string> = {
+	hw_nest: 'opal',
+	hw_arsenal: 'sapphire',
+	hw_lighthouse: 'ruby',
+	hw_streets: 'garnet',
+	hw_lakeside: 'emerald',
+	extra_pale_keep: 'white'
+};
+
+export function area_to_color(area: AreaName): string {
+	return `${areaColorMap[area]}`;
+}
+
+const chestColorMap: Record<number, GemName> = {
+	2: 'white',
+	3: 'opal',
+	4: 'sapphire',
+	5: 'ruby',
+	6: 'garnet',
+	7: 'emerald'
+};
+
+export function chest_to_color(id: number): GemName {
+	if (!(id in chestColorMap)) return 'white';
+	return chestColorMap[id as keyof typeof chestColorMap];
 }

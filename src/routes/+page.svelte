@@ -1,5 +1,5 @@
 <script lang="ts">
-	import seed_data from '$lib/seed-data.json';
+	import seed_data from '$lib/seed-data.json'; // BIG BOYE
 	import { name_to_id, itemList, gem_to_id } from '$lib/item-map';
 	import { Seed } from '$lib/seed';
 	import Combobox from './combobox.svelte';

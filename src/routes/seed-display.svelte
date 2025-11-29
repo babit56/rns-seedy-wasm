@@ -1,11 +1,16 @@
 <script lang="ts">
+	import chest_data from '$lib/chest-data.json'; // slightly smaller BOYE
 	import IconArrowFatRightFill from 'phosphor-icons-svelte/IconArrowFatRightFill.svelte';
 	import {
 		id_to_icon,
 		area_to_icon,
 		area_to_name,
 		id_to_gem_icon,
-		id_to_potion_icon
+		id_to_potion_icon,
+		area_to_color,
+		chest_to_color,
+		type AreaName,
+		type GemName
 	} from '$lib/item-map';
 	import { Seed } from '$lib/seed';
 	type Props = {
@@ -13,6 +18,8 @@
 	};
 
 	let { seed }: Props = $props();
+
+	let chestData: number[] = chest_data[seed.id].slice(1);
 </script>
 
 {#snippet area(name: string)}
@@ -28,8 +35,23 @@
 	</div>
 {/snippet}
 
-{#snippet chest(index: number)}
-	<div class="item-list">
+{#snippet chest(index: number, areaName: string | undefined = undefined)}
+	<p class="chest-label">
+		{areaName ?? `Chest ${index}`}
+		<span
+			>{#if chestData[index] - 2 !== 0}
+				{@render inlineIcon(`images/jewels/spr_item_jewels_${chestData[index] - 2}.png`)}
+			{/if}<span data-gem={chest_to_color(chestData[index])}
+				>{chest_to_color(chestData[index])} chest</span
+			></span
+		>
+	</p>
+	<div
+		class="chest"
+		style={chestData.at(index) !== undefined
+			? `--chest-background: var(--surface-${chest_to_color(chestData[index])}); --chest-color: var(--color-${chest_to_color(chestData[index])})`
+			: null}
+	>
 		{#each seed.chest(index) as item}
 			<div class="item">
 				<img
@@ -39,64 +61,99 @@
 					src={`images/loot/${id_to_icon(item.id)}.webp`}
 					alt="Loot item"
 				/>
-				<p>{item.name}</p>
+				<p class="loot-name">{item.name}</p>
 			</div>
 		{/each}
 	</div>
 {/snippet}
 
-{#snippet shop(index: number)}
-	<div class="potion-list">
-		{#each seed.shop(index)?.potions as potion}
-			<div class="potion">
-				<img
-					width="135"
-					height="135"
-					class="item-icon"
-					src={`images/potions/${id_to_potion_icon(potion.id)}.png`}
-					alt="Loot item"
-				/>
-				<div class="potion-text">
-					<p>{potion.name}</p>
-					<p><span class="item-price">{@render coin()} {potion.price}</span></p>
+{#snippet shop(index: number, area: AreaName | undefined = undefined)}
+	<div
+		class="shop"
+		style={area
+			? `--shop-background: var(--surface-${area_to_color(area)}); --shop-color: var(--color-${area_to_color(area)})`
+			: null}
+	>
+		<div class="shop-top-list">
+			<div class="permanent-items">
+				<div class="item">
+					<img
+						width="135"
+						height="135"
+						class="item-icon"
+						src="images/Full_heal_square.png"
+						alt="Potion icon"
+					/>
+					<div class="item-text">
+						<p>Full Heal</p>
+						<p><span class="item-price">{@render coin()} 5</span></p>
+					</div>
+				</div>
+				<div class="item">
+					<img
+						width="135"
+						height="135"
+						class="item-icon"
+						src="images/Level_up_orb.png"
+						alt="Potion icon"
+					/>
+					<div class="item-text">
+						<p>Level Up</p>
+						<p><span class="item-price">{@render coin()} 5</span></p>
+					</div>
 				</div>
 			</div>
-		{/each}
-	</div>
-	<div class="gem-list">
-		{#each seed.shop(index)?.gems as gem}
-			<div class="gem">
-				<img
-					width="110"
-					height="110"
-					class="item-icon"
-					src={`images/gems/${id_to_gem_icon(gem.id)}.png`}
-					alt="Loot item"
-				/>
-				<div class="gem-text">
-					<p data-gem={gem.key}>{gem.name}</p>
-					<p><span class="item-price">{@render coin()} {gem.price}</span></p>
-				</div>
+			<div class="potion-items">
+				{#each seed.shop(index)?.potions as potion}
+					<div class="item">
+						<img
+							width="135"
+							height="135"
+							class="item-icon"
+							src={`images/potions/${id_to_potion_icon(potion.id)}.png`}
+							alt="Potion icon"
+						/>
+						<div class="item-text">
+							<p class="potion-name">{potion.name}</p>
+							<p><span class="item-price">{@render coin()} {potion.price}</span></p>
+						</div>
+					</div>
+				{/each}
 			</div>
-		{/each}
+		</div>
+		<div class="gem-list">
+			{#each seed.shop(index)?.gems as gem}
+				<div class="gem">
+					<img
+						width="110"
+						height="110"
+						class="item-icon"
+						src={`images/gems/${id_to_gem_icon(gem.id)}.png`}
+						alt="Loot item"
+					/>
+					<div class="item-text">
+						<p data-gem={gem.key}>{gem.name}</p>
+						<p><span class="item-price">{@render coin()} {gem.price}</span></p>
+					</div>
+				</div>
+			{/each}
+		</div>
 	</div>
 {/snippet}
 
 {#snippet coin()}
-	<img width="60" height="60" class="coin" src={`images/coin.png`} alt="Coin" />
+	<img width="60" height="60" class="coin" src="images/coin.png" alt="Coin" />
 {/snippet}
 
-{#snippet areaIconSmall(name: string)}
-	<img
-		class="area-icon-small"
-		src={`images/areas/${area_to_icon(name)}.webp`}
-		alt={area_to_name(name)}
-	/>
+{#snippet inlineIcon(src: string, alt: string | null = null)}
+	<img class="inline-icon" {src} {alt} />
 {/snippet}
 
 <div class="seed-entry">
 	<h3>Seed {seed.id}</h3>
-	<h4>Areas</h4>
+	<h4>
+		Areas {@render inlineIcon(`images/areas/${area_to_icon('extra_moonlit_prescipice')}.webp`)}
+	</h4>
 	<div class="area-list">
 		{@render area('extra_outskirts')}
 		<IconArrowFatRightFill class="area-arrow" />
@@ -108,30 +165,24 @@
 		<IconArrowFatRightFill class="area-arrow" />
 		{@render area('extra_pale_keep')}
 	</div>
-	<h4>Chests</h4>
+	<h4>Chests {@render inlineIcon('images/Shop-icon.png')}</h4>
 	<div class="chest-list">
-		<p class="chest-label">Outskirts 1 {@render areaIconSmall('extra_outskirts')}</p>
-		{@render chest(0)}
-		<p class="chest-label">Outskirts 2 {@render areaIconSmall('extra_outskirts')}</p>
-		{@render chest(1)}
-		<p class="chest-label">{seed.areaTitle(0)} {@render areaIconSmall(seed.areaName(0))}</p>
-		{@render chest(2)}
-		<p class="chest-label">{seed.areaTitle(1)} {@render areaIconSmall(seed.areaName(1))}</p>
-		{@render chest(3)}
-		<p class="chest-label">{seed.areaTitle(2)} {@render areaIconSmall(seed.areaName(2))}</p>
-		{@render chest(4)}
-		<p class="chest-label">Pale Keep {@render areaIconSmall('extra_pale_keep')}</p>
-		{@render chest(5)}
+		{@render chest(0, 'Outskirts 1')}
+		{@render chest(1, 'Outskirts 2')}
+		{@render chest(2, seed.areaTitle(0))}
+		{@render chest(3, seed.areaTitle(1))}
+		{@render chest(4, seed.areaTitle(2))}
+		{@render chest(5, 'Pale Keep')}
 	</div>
-	<h4>Shops</h4>
-	<p class="shop-label">{seed.areaTitle(0)} Shop {@render areaIconSmall(seed.areaName(0))}</p>
-	{@render shop(0)}
-	<p class="shop-label">{seed.areaTitle(1)} Shop {@render areaIconSmall(seed.areaName(1))}</p>
-	{@render shop(1)}
-	<p class="shop-label">{seed.areaTitle(2)} Shop {@render areaIconSmall(seed.areaName(2))}</p>
-	{@render shop(2)}
-	<p class="shop-label">Pale Keep Shop {@render areaIconSmall('extra_pale_keep')}</p>
-	{@render shop(3)}
+	<h4>Shops {@render inlineIcon('images/coin.png')}</h4>
+	<p class="shop-label">{seed.areaTitle(0)}</p>
+	{@render shop(0, seed.areaName(0))}
+	<p class="shop-label">{seed.areaTitle(1)}</p>
+	{@render shop(1, seed.areaName(1))}
+	<p class="shop-label">{seed.areaTitle(2)}</p>
+	{@render shop(2, seed.areaName(2))}
+	<p class="shop-label">Pale Keep</p>
+	{@render shop(3, 'extra_pale_keep')}
 </div>
 
 <style>
@@ -143,21 +194,30 @@
 	h4 {
 		margin-block: 1em 0.25em;
 		padding-bottom: 0.25rem;
-		border-bottom: 4px dashed var(--surface-3);
+		border-bottom: 4px solid var(--surface-2);
 		max-inline-size: unset;
 	}
 
 	.seed-entry {
 		padding: 1rem;
 		background-color: var(--surface-1);
-		border: var(--border-size-1) solid var(--surface-4);
+		border: var(--border-size-1) solid var(--surface-2);
 		border-radius: var(--radius-2);
-		box-shadow: var(--shadow-2);
+		box-shadow: var(--shadow-4);
 	}
 
 	.chest-label,
 	.shop-label {
-		margin-top: 0.5rem;
+		margin-block: var(--size-2) var(--size-1);
+	}
+
+	.chest-label {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.loot-name {
+		line-height: 1.2;
 	}
 
 	.area-list {
@@ -184,27 +244,15 @@
 		font-size: 2rem;
 	}
 
-	@media screen and (width < 600px) {
-		.area-list {
-			display: flex;
-			flex-wrap: wrap;
-			gap: 1rem;
-		}
-		.area-icon {
-			width: 60px;
-		}
-		:global(.area-arrow) {
-			/* display: none; */
-		}
-	}
-
-	.item-list {
+	.chest {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
 		gap: 1rem;
-		background-color: var(--surface-2);
-		padding: var(--size-2);
-		border-radius: var(--size-2);
+		padding: var(--size-2) var(--size-3);
+		background-color: var(--chest-background, var(--surface-2));
+		border-color: var(--chest-color, var(--surface-2));
+		border-left-width: 2px;
+		border-right-width: 2px;
 	}
 
 	.item {
@@ -220,28 +268,36 @@
 		aspect-ratio: 1 / 1;
 	}
 
-	.potion-list {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-		gap: 1rem;
-		background-color: var(--surface-2);
-		padding: var(--size-2);
+	.shop {
+		background-color: var(--shop-background, var(--surface-2));
+		border-color: var(--shop-color, var(--surface-2));
+		border-left-width: 3px;
+		border-right-width: 3px;
 	}
 
-	.potion {
-		display: flex;
-		gap: 0.5rem;
-		align-items: center;
-		color: var(--text-2);
-		overflow-wrap: anywhere;
+	.shop-top-list {
+		display: grid;
+		grid-template-columns: 1fr 2fr;
+		border-bottom: 2px solid var(--surface-3);
+	}
+	.permanent-items {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(80px, 1fr));
+		border-right: 2px solid var(--surface-3);
+		padding: var(--size-2) var(--size-2) var(--size-2) var(--size-3);
+	}
+	.potion-items {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(80px, 1fr));
+		gap: var(--size-3);
+		padding: var(--size-2) var(--size-3) var(--size-2) var(--size-2);
 	}
 
 	.gem-list {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-		gap: 1rem;
-		background-color: var(--surface-2);
-		padding: var(--size-2);
+		grid-template-columns: repeat(4, minmax(120px, 1fr));
+		gap: 0.75rem;
+		padding: var(--size-2) var(--size-3);
 	}
 
 	.gem {
@@ -252,9 +308,14 @@
 		overflow-wrap: anywhere;
 	}
 
-	.gem-text,
-	.potion-text {
-		line-height: 1.2;
+	.item-text {
+		line-height: 1.4;
+		font-weight: var(--font-weight-6);
+	}
+
+	/* Some potion names are too long... */
+	.potion-name {
+		font-size: var(--font-size-fluid-0);
 	}
 
 	.item-price {
@@ -266,6 +327,33 @@
 		line-height: 1.2;
 	}
 
+	@media screen and (width < 800px) {
+		.area-list {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 1rem;
+		}
+		.area-icon {
+			width: 60px;
+		}
+		:global(.area-arrow) {
+			/* display: none; */
+		}
+
+		.shop-top-list {
+			grid-template-columns: 1fr;
+		}
+		.permanent-items {
+			border-width: 0;
+		}
+		.potion-items {
+			grid-template-columns: repeat(2, minmax(80px, 1fr));
+		}
+		.gem-list {
+			grid-template-columns: repeat(2, minmax(120px, 1fr));
+		}
+	}
+
 	.coin {
 		display: inline;
 		width: 1rem;
@@ -273,12 +361,15 @@
 		vertical-align: bottom;
 	}
 
-	.area-icon-small {
+	.inline-icon {
 		display: inline;
-		height: 1.5rem;
+		height: 1.2em;
 		vertical-align: bottom;
 	}
 
+	[data-gem='white'] {
+		color: var(--color-white);
+	}
 	[data-gem='emerald'] {
 		color: var(--color-emerald);
 	}

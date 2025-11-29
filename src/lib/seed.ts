@@ -1,4 +1,11 @@
-import { area_to_name, id_to_gem, id_to_gem_key, id_to_name, id_to_potion } from './item-map';
+import {
+	area_to_name,
+	id_to_gem,
+	id_to_gem_key,
+	id_to_name,
+	id_to_potion,
+	type AreaName
+} from './item-map';
 
 type Shop = {
 	potions: { name: string; price: number; id: number }[];
@@ -47,8 +54,8 @@ export class Seed {
 		return this.shops.at(index);
 	}
 
-	areaName(index: number): string {
-		return this.areas[index];
+	areaName(index: number): AreaName {
+		return this.areas[index] as AreaName;
 	}
 
 	areaTitle(index: number): string {

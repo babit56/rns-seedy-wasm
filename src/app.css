@@ -10,11 +10,19 @@
 :root {
 	--brand: var(--blue-2);
 
+	--color-white: oklch(from var(--link) l 0 0);
 	--color-emerald: oklch(from var(--link) l c 159.32);
 	--color-garnet: oklch(from var(--link) l c 72.25);
 	--color-ruby: oklch(from var(--link) l c 16.6);
 	--color-sapphire: oklch(from var(--link) l c 236.35);
 	--color-opal: oklch(from var(--link) l c 276.98);
+
+	--surface-white: oklch(from var(--surface-2) l 0 0);
+	--surface-emerald: oklch(from var(--surface-2) l c 159.32);
+	--surface-garnet: oklch(from var(--surface-2) l c 72.25);
+	--surface-ruby: oklch(from var(--surface-2) l c 16.6);
+	--surface-sapphire: oklch(from var(--surface-2) l c 236.35);
+	--surface-opal: oklch(from var(--surface-2) l c 276.98);
 }
 
 :focus-visible {

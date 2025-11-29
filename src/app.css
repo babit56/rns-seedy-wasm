@@ -23,6 +23,8 @@
 	--surface-ruby: oklch(from var(--surface-2) l c 16.6);
 	--surface-sapphire: oklch(from var(--surface-2) l c 236.35);
 	--surface-opal: oklch(from var(--surface-2) l c 276.98);
+
+	--surface-overlay: color-mix(in lch, var(--surface-2), transparent 20%);
 }
 
 :focus-visible {
@@ -102,6 +104,36 @@ button {
 	}
 	&:active {
 		background-color: color-mix(in lch, var(--surface-3), rgb(from var(--surface-1) r g b) 30%);
+	}
+	&:disabled {
+		background-color: color-mix(in lch, var(--surface-3), rgb(from var(--surface-4) r g b) 30%);
+		cursor: not-allowed;
+	}
+}
+
+.outlined-button {
+	background-color: unset;
+	border: var(--border-size-2) solid var(--surface-3);
+	transition: border-color 100ms;
+	&:hover {
+		border-color: color-mix(in lch, var(--surface-3), rgb(from var(--surface-1) r g b) 20%);
+	}
+	&:active {
+		border-color: color-mix(in lch, var(--surface-3), rgb(from var(--surface-1) r g b) 30%);
+	}
+	&:disabled {
+		background-color: color-mix(in lch, var(--surface-4), transparent 90%);
+		border-color: color-mix(in lch, var(--surface-3), rgb(from var(--surface-4) r g b) 30%);
+		cursor: not-allowed;
+	}
+}
+
+input:not([type='button'], [type='submit'], [type='reset']) {
+	background-color: var(--surface-2);
+
+	&:disabled {
+		background-color: color-mix(in lch, var(--surface-2), rgb(from var(--surface-3) r g b) 30%);
+		cursor: not-allowed;
 	}
 }
 

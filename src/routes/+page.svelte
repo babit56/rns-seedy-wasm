@@ -4,6 +4,7 @@
 	import { Seed } from '$lib/seed';
 	import Combobox from './combobox.svelte';
 	import SeedDisplay from './seed-display.svelte';
+	import { browser } from '$app/environment';
 
 	let item_1 = $state('');
 	let item_2 = $state('');
@@ -84,13 +85,13 @@
 <h2 class="page-title">Seed-In-Progress finder</h2>
 <div class="columns">
 	<section class="prose">
-		<h3>What it Does</h3>
+		<h3>About</h3>
 		<p>
 			This tool allows you to find your <strong>current seed</strong> in a Hard or Lunar difficulty run.
 			Loot and shops are generated separately, so you need one chest of loot to figure out chests and
 			one shop to figure out shops
 		</p>
-		<h3>How to Use</h3>
+		<h3>Usage</h3>
 		<p>
 			Enter first chest's items and press Search to find all future items. You can optionally add
 			the first shop's gems to find out what the rest of the run's gems will be.
@@ -100,57 +101,40 @@
 			View Inventory button and then read the list left to right. Gems are read left to right.
 		</p>
 	</section>
-	<section>
+	<section class="input-section">
 		<fieldset class="input-area">
 			<legend>First chest loot</legend>
-			<label>
-				Item 1
+			<div class="combobox-aligned-input">
+				<p class="combobox-label">Item 1</p>
 				<Combobox type="single" {items} bind:value={item_1} />
-			</label>
-			<label>
-				Item 2
+				<p class="combobox-label">Item 2</p>
 				<Combobox type="single" {items} bind:value={item_2} />
-			</label>
-			<label>
-				Item 3
+				<p class="combobox-label">Item 3</p>
 				<Combobox type="single" {items} bind:value={item_3} />
-			</label>
-			<label>
-				Item 4
+				<p class="combobox-label">Item 4</p>
 				<Combobox type="single" {items} bind:value={item_4} />
-			</label>
-			<label>
-				Item 5
+				<p class="combobox-label">Item 5</p>
 				<Combobox type="single" {items} bind:value={item_5} />
-			</label>
-			<datalist id="items">
-				{#each itemList as item}
-					<option value={item}></option>
-				{/each}
-			</datalist>
+			</div>
 		</fieldset>
 		<fieldset class="input-area">
 			<legend>Shop gems <em>(optional)</em></legend>
-			<label>
-				Primary Gem
+			<div class="combobox-aligned-input">
+				<p class="combobox-label">Primary Gem</p>
 				<Combobox type="single" items={gems} bind:value={gem_1} />
-			</label>
-			<label>
-				Secondary Gem
+				<p class="combobox-label">Secondary Gem</p>
 				<Combobox type="single" items={gems} bind:value={gem_2} />
-			</label>
-			<label>
-				Special Gem
+				<p class="combobox-label">Special Gem</p>
 				<Combobox type="single" items={gems} bind:value={gem_3} />
-			</label>
-			<label>
-				Defensive Gem
+				<p class="combobox-label">Defensive Gem</p>
 				<Combobox type="single" items={gems} bind:value={gem_4} />
-			</label>
+			</div>
 		</fieldset>
 		<div class="button-group">
-			<button class="action-button" onclick={get_seed_data}>Search</button>
-			<button class="action-button outlined-button" onclick={reset_seed_data}>Reset</button>
+			<button class="action-button" disabled={!browser} onclick={get_seed_data}>Search</button>
+			<button class="action-button outlined-button" disabled={!browser} onclick={reset_seed_data}
+				>Reset</button
+			>
 		</div>
 	</section>
 </div>
@@ -166,9 +150,7 @@
 {:else}
 	<p>No seed found...</p>
 	<p>
-		Want example? You can <button class="inline-button" onclick={loadExampleSeed}
-			>Load the Example Seed</button
-		>
+		Want example? <button class="inline-button" onclick={loadExampleSeed}>Load Seed 0</button>
 	</p>
 {/if}
 
@@ -185,6 +167,10 @@
 		column-gap: 2rem;
 	}
 
+	.input-section {
+		position: relative;
+	}
+
 	.input-area {
 		padding: 0.5rem;
 		display: flex;
@@ -199,16 +185,15 @@
 		}
 	}
 
-	.outlined-button {
-		background-color: unset;
-		border: var(--border-size-2) solid var(--surface-4);
-		transition: border-color 100ms;
-		&:hover {
-			border-color: color-mix(in lch, var(--surface-4), rgb(from var(--surface-1) r g b) 20%);
-		}
-		&:active {
-			border-color: color-mix(in lch, var(--surface-4), rgb(from var(--surface-1) r g b) 30%);
-		}
+	.combobox-label {
+		font-size: var(--font-size-1);
+	}
+
+	.combobox-aligned-input {
+		display: grid;
+		grid-template-columns: auto 1fr;
+		align-items: center;
+		gap: var(--size-2) 1ch;
 	}
 
 	.inline-button {

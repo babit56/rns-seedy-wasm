@@ -1013,7 +1013,22 @@ const chestColorMap: Record<number, GemName> = {
 	7: 'emerald'
 };
 
+// Displayed name
+const chestColorLabelMap: Record<number, string> = {
+	2: 'white',
+	3: 'opal',
+	4: 'sapphire',
+	5: 'ruby',
+	6: 'garnet',
+	7: 'emerald'
+};
+
 export function chest_to_color(id: number): GemName {
 	if (!(id in chestColorMap)) return 'white';
 	return chestColorMap[id as keyof typeof chestColorMap];
+}
+
+export function chest_to_color_label(id: number): string {
+	if (!(id in chestColorLabelMap)) return 'White';
+	return chestColorLabelMap[id as keyof typeof chestColorLabelMap];
 }

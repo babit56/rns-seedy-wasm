@@ -1,5 +1,4 @@
 <script lang="ts">
-	import chest_data from '$lib/chest-data.json'; // slightly smaller BOYE
 	import IconArrowFatRightFill from 'phosphor-icons-svelte/IconArrowFatRightFill.svelte';
 	import {
 		id_to_icon,
@@ -8,9 +7,7 @@
 		id_to_gem_icon,
 		id_to_potion_icon,
 		area_to_color,
-		chest_to_color,
-		type AreaName,
-		type GemName
+		type AreaName
 	} from '$lib/item-map';
 	import { Seed } from '$lib/seed';
 	type Props = {
@@ -18,8 +15,6 @@
 	};
 
 	let { seed }: Props = $props();
-
-	let chestData: number[] = chest_data[seed.id].slice(1);
 </script>
 
 {#snippet area(name: string)}
@@ -36,23 +31,23 @@
 {/snippet}
 
 {#snippet chest(index: number, areaName: string | undefined = undefined)}
-	<p class="chest-label">
-		{areaName ?? `Chest ${index}`}
-		<span
-			>{#if chestData[index] - 2 !== 0}
-				{@render inlineIcon(`images/jewels/spr_item_jewels_${chestData[index] - 2}.png`)}
-			{/if}<span data-gem={chest_to_color(chestData[index])}
-				>{chest_to_color(chestData[index])} chest</span
-			></span
-		>
-	</p>
+	<div class="chest-label">
+		<p>{areaName ?? `Chest ${index}`}</p>
+		<p>
+			{#if seed.chest(index)}
+				{@render inlineIcon(
+					`images/jewels/spr_item_jewels_${seed.chest(index)?.spriteId}.png`
+				)}&thinsp;
+			{/if}<span data-gem={seed.chest(index)?.name}>{seed.chest(index)?.label} chest</span>
+		</p>
+	</div>
 	<div
 		class="chest"
-		style={chestData.at(index) !== undefined
-			? `--chest-background: var(--surface-${chest_to_color(chestData[index])}); --chest-color: var(--color-${chest_to_color(chestData[index])})`
+		style={seed.chest(index)?.colorId !== undefined
+			? `--chest-background: var(--surface-${seed.chest(index)?.name}); --chest-color: var(--color-${seed.chest(index)?.name})`
 			: null}
 	>
-		{#each seed.chest(index) as item}
+		{#each seed.chest(index)?.items as item}
 			<div class="item">
 				<img
 					width="110"

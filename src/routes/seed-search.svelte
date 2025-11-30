@@ -63,6 +63,17 @@
 	}
 
 	function reset_seed_data() {
+		item_1 = '';
+		item_2 = '';
+		item_3 = '';
+		item_4 = '';
+		item_5 = '';
+		item_6 = '';
+
+		area_1 = '';
+		area_2 = '';
+		area_3 = '';
+
 		possible_seeds = [];
 		searched = false;
 	}

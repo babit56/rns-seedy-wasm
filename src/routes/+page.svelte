@@ -10,7 +10,8 @@
 		loading = false;
 	});
 
-	let seed_data: any[] = $state([]);
+	// Cannot be a rune for performance reasons...
+	let seed_data: any[] = [];
 
 	function loadExampleSeed() {
 		found_seeds = [new Seed(seed_data[0])];
@@ -24,7 +25,7 @@
 	let found_seeds = $state<Seed[]>([]);
 </script>
 
-<SeedInProgress {seed_data} bind:seed={found_seeds} bind:searched />
+<SeedInProgress {seed_data} bind:possible_seeds={found_seeds} bind:searched bind:loading />
 <div class="result-header">
 	<h2>Results ({found_seeds.length})</h2>
 	<PlayerCount bind:value={playerCount} />

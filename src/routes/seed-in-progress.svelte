@@ -6,13 +6,15 @@
 
 	type Props = {
 		seed_data: any[];
-		seed: Seed[];
+		loading: boolean;
+		possible_seeds: Seed[];
 		searched: boolean;
 	};
 
 	let {
 		seed_data,
-		seed: possible_seeds = $bindable([]),
+		loading = $bindable(true),
+		possible_seeds = $bindable([]),
 		searched = $bindable(false)
 	}: Props = $props();
 
@@ -37,6 +39,8 @@
 	let gem_4_id = $derived(gem_to_id(gem_4, 3));
 
 	function get_seed_data() {
+		console.time('hi');
+		console.log(seed_data);
 		const matched_seeds = seed_data.filter((seed: Array<string | number>) => {
 			// Match first 5 items
 			const all_items_match =
@@ -60,6 +64,7 @@
 
 		possible_seeds = [...matched_seeds.map((s: Array<string | number>) => new Seed(s))];
 		searched = true;
+		console.timeEnd('hi');
 	}
 
 	function reset_seed_data() {
@@ -82,14 +87,13 @@
 		value: item,
 		label: item
 	}));
-
-	const loading = $derived(seed_data.length === 0);
 </script>
 
 <h2 class="page-title">Seed-In-Progress finder</h2>
 <div class="columns">
 	<section class="prose">
 		<h3>About</h3>
+		<p>{seed_data.length}</p>
 		<p>
 			This tool allows you to find your <strong>current seed</strong> in a Hard or Lunar difficulty run.
 			Loot and shops are generated separately, so you need one chest of loot to figure out chests and

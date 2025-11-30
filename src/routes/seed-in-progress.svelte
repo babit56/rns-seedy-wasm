@@ -108,7 +108,7 @@
 	</section>
 	<section class="input-section">
 		<fieldset class="input-area">
-			<legend>First chest loot</legend>
+			<legend>First chest loot <em>(required)</em></legend>
 			<div class="combobox-aligned-input">
 				<p class="combobox-label">Item 1</p>
 				<Combobox type="single" {items} bind:value={item_1} />
@@ -123,7 +123,7 @@
 			</div>
 		</fieldset>
 		<fieldset class="input-area">
-			<legend>Shop gems <em>(optional)</em></legend>
+			<legend>Shop gems</legend>
 			<div class="combobox-aligned-input">
 				<p class="combobox-label">Primary Gem</p>
 				<Combobox type="single" items={gems} bind:value={gem_1} />

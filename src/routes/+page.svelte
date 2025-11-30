@@ -60,7 +60,7 @@
 </Tabs.Root>
 <div class="results-header">
 	<h2>
-		Results {#if searched > 0}<span class="results-count">({found_seeds.length})</span>{/if}
+		Results {#if searched}<span class="results-count">({found_seeds.length})</span>{/if}
 	</h2>
 	<PlayerCount bind:value={playerCount} />
 </div>

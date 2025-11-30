@@ -129,10 +129,19 @@
 			chest. Also, this does not account for 1-3 player games so the results may show seeds that are
 			not possible.
 		</p>
+		<p>
+			The seed count is limited to 5000 for performance reasons, though you can enable a full search
+			if you are patient&mdash;it will freeze your browser for a bit.
+		</p>
 		<h3>Usage</h3>
 		<p>
-			Enter every item that someone has picked in order that they picked them. You can optionally
-			add the areas to filter further if you hit multiple possible seeds.
+			To find the seed behind someone's run, enter every item that someone has picked in order that
+			they picked them. You can optionally add the areas to filter further if you hit multiple
+			possible seeds or by gem availability in shops.
+		</p>
+		<p>
+			To find seeds with specific parameters, enter them. E.g. you can find seeds with a Mountain
+			Staff in the first chest and a Ruby Special available somewhere in the run.
 		</p>
 	</section>
 	<section class="input-section">

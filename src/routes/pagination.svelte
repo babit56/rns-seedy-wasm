@@ -29,9 +29,7 @@
 			</Pagination.NextButton>
 		</div>
 		<p>
-			Seeds {range.start}&ndash;{range.end} of {count}{#if count >= 5000}+ (limited for performance)
-			{/if}
-			<!-- 5000 is an arbitrary max seed count from seed-search -->
+			Seeds {range.start}&ndash;{range.end} of {count}
 		</p>
 	{/snippet}
 </Pagination.Root>

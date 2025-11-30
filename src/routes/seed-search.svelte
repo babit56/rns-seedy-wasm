@@ -2,6 +2,7 @@
 	import { Seed } from '$lib/seed';
 	import { gem_to_id, itemList, name_to_id, type SeedData } from '$lib/item-map';
 	import Combobox from './combobox.svelte';
+	import Switch from './switch.svelte';
 
 	type Props = {
 		seed_data: SeedData[];
@@ -43,6 +44,8 @@
 	let gem_3_id = $derived(gem_to_id(gem_3, 2));
 	let gem_4_id = $derived(gem_to_id(gem_4, 3));
 
+	let showAllSeeds = $state(false);
+
 	// Area searches find >5000 but item searches cap at ~3500... Compromise for performance!
 	const maxSeedSearch = 5000;
 
@@ -51,7 +54,7 @@
 		let matchCount = 0;
 		const matched_seeds = seed_data.filter((seed) => {
 			// Limit the number of seeds to match to (Surely you won't be looking through over 5000 seeds...)
-			if (matchCount >= maxSeedSearch) {
+			if (!showAllSeeds && matchCount >= maxSeedSearch) {
 				return false;
 			}
 
@@ -186,6 +189,12 @@
 				<Combobox type="single" items={gems} bind:value={gem_4} />
 			</div>
 		</fieldset>
+		<div class="switch">
+			<Switch
+				labelText={showAllSeeds ? 'Show ALL seeds (LAGGY)' : `Show first ${maxSeedSearch} seeds`}
+				bind:checked={showAllSeeds}
+			/>
+		</div>
 		<div class="button-group">
 			<button class="action-button" disabled={loading} onclick={get_seed_data}>Search</button>
 			<button class="action-button outlined-button" disabled={loading} onclick={reset_seed_data}
@@ -196,4 +205,7 @@
 </div>
 
 <style>
+	.switch {
+		margin-bottom: 0.75rem;
+	}
 </style>

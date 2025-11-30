@@ -48,7 +48,7 @@
 				{#each items as item (item.index)}
 					<RatingGroup.Item index={item.index}>
 						<Tooltip.Root>
-							<Tooltip.Trigger>
+							<Tooltip.Trigger style=" all:unset">
 								<img
 									src={item.state === 'inactive'
 										? 'images/rabbit.svg'

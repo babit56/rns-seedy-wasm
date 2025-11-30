@@ -1,11 +1,17 @@
 <script lang="ts">
-	import seed_data from '$lib/seed-data.json'; // BIG BOYE
 	import { name_to_id, itemList, gem_to_id } from '$lib/item-map';
 	import { Seed } from '$lib/seed';
 	import Combobox from './combobox.svelte';
 	import PlayerCount from './player-count.svelte';
 	import SeedDisplay from './seed-display.svelte';
-	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
+
+	let seed_data: any[] = [];
+
+	onMount(async () => {
+		seed_data = (await import('$lib/seed-data.json')).default;
+		loading = false;
+	});
 
 	let item_1 = $state('');
 	let item_2 = $state('');
@@ -73,6 +79,8 @@
 		searched = false;
 	}
 
+	let loading = $state(true);
+
 	let searched = $state(false);
 	let found_seeds = $state<Seed[]>([]);
 
@@ -134,8 +142,8 @@
 			</div>
 		</fieldset>
 		<div class="button-group">
-			<button class="action-button" disabled={!browser} onclick={get_seed_data}>Search</button>
-			<button class="action-button outlined-button" disabled={!browser} onclick={reset_seed_data}
+			<button class="action-button" disabled={loading} onclick={get_seed_data}>Search</button>
+			<button class="action-button outlined-button" disabled={loading} onclick={reset_seed_data}
 				>Reset</button
 			>
 		</div>

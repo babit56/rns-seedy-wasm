@@ -214,6 +214,9 @@
 	.result-header {
 		margin-top: 2.5rem;
 		display: flex;
+		flex-wrap: wrap;
+		row-gap: var(--size-1);
+		margin-bottom: var(--size-2);
 		justify-content: space-between;
 		align-items: center;
 	}

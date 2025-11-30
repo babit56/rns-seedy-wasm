@@ -305,6 +305,7 @@
 				black 95%,
 				black
 			);
+			z-index: 0;
 		}
 	}
 
@@ -312,6 +313,8 @@
 		display: grid;
 		grid-template-columns: 1fr 2fr;
 		border-bottom: 2px solid var(--surface-3);
+		position: relative;
+		z-index: 1;
 	}
 	.permanent-items {
 		display: grid;
@@ -331,6 +334,8 @@
 		grid-template-columns: repeat(4, minmax(120px, 1fr));
 		gap: 0.75rem;
 		padding: var(--size-2) var(--size-3);
+		position: relative;
+		z-index: 1;
 	}
 
 	.gem {

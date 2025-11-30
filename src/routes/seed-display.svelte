@@ -267,8 +267,44 @@
 	.shop {
 		background-color: var(--shop-background, var(--surface-2));
 		border-color: var(--shop-color, var(--surface-2));
+		border-style: dashed;
 		border-left-width: 3px;
 		border-right-width: 3px;
+		position: relative;
+
+		--c: color-mix(in lch, var(--shop-color), transparent 70%);
+
+		&::before {
+			content: '';
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			background-image: linear-gradient(
+				-45deg,
+				transparent,
+				transparent 18.3707517568%,
+				var(--c) 0,
+				var(--c) 31.6292482432%,
+				transparent 0,
+				transparent 68.3707517568%,
+				var(--c) 0,
+				var(--c) 81.6292482432%,
+				transparent 0,
+				transparent
+			);
+			background-repeat: repeat;
+			background-size: 0.75rem 0.75rem;
+			opacity: 0.2;
+			mask-image: linear-gradient(
+				-30deg,
+				black,
+				black 5%,
+				transparent 30%,
+				transparent 70%,
+				black 95%,
+				black
+			);
+		}
 	}
 
 	.shop-top-list {

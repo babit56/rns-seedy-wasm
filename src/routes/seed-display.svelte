@@ -35,11 +35,12 @@
 	<div class="chest-label">
 		<p>{areaName ?? `Chest ${index}`}</p>
 		<p>
-			{#if seed.chest(index)}
-				{@render inlineIcon(
-					`images/jewels/spr_item_jewels_${seed.chest(index)?.spriteId}.png`
-				)}&thinsp;
-			{/if}<span data-gem={seed.chest(index)?.name}>{seed.chest(index)?.label} chest</span>
+			<span data-gem={seed.chest(index)?.name}
+				>{seed.chest(index)?.label} chest{#if seed.chest(index)}&thinsp;{@render inlineIcon(
+						`images/jewels/spr_item_jewels_${seed.chest(index)?.spriteId}.png`
+					)}
+				{/if}
+			</span>
 		</p>
 	</div>
 	<div

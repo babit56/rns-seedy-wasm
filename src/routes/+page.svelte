@@ -8,6 +8,7 @@
 	import SeedSelect from './seed-select.svelte';
 	import { Tabs } from 'bits-ui';
 	import SeedSearch from './seed-search.svelte';
+	import Pagination from './pagination.svelte';
 
 	onMount(async () => {
 		seed_data = await (await fetch('data/seed-data.json')).json(); // Static assets makes the IDE happy
@@ -18,16 +19,23 @@
 	// svelte-ignore non_reactive_update
 	let seed_data: SeedData[] = [];
 
-	function loadExampleSeed() {
-		found_seeds = [new Seed(seed_data[0])];
-		searched = true;
-	}
-
 	let loading = $state(true);
 	let searched = $state(false);
 	let playerCount = $state(4);
 
+	let seedPage = $state(1);
+	let perPage = 10;
+
 	let found_seeds = $state<Seed[]>([]);
+
+	// Reset page on seed change
+	$effect(() => {
+		found_seeds.length;
+		seedPage = 1;
+	});
+
+	let showPagination = $derived(found_seeds.length > perPage);
+	let seedWindow = $derived(found_seeds.slice(perPage * (seedPage - 1), perPage * seedPage));
 </script>
 
 <Tabs.Root value="progress">
@@ -51,33 +59,33 @@
 	</Tabs.Content>
 </Tabs.Root>
 <div class="result-header">
-	<h2>Results ({found_seeds.length})</h2>
+	<h2>Results</h2>
 	<PlayerCount bind:value={playerCount} />
 </div>
 {#if found_seeds.length > 0}
+	{#if showPagination}
+		<Pagination count={found_seeds.length} {perPage} bind:page={seedPage}></Pagination>
+	{/if}
 	<div class="seed-list">
-		{#each found_seeds as seed}
+		{#each seedWindow as seed}
 			<SeedDisplay {seed} {playerCount} />
 		{/each}
 	</div>
-{:else if !searched}
-	<p><em>Search for your seed!</em></p>
+	{#if showPagination}
+		<Pagination count={found_seeds.length} {perPage} bind:page={seedPage}></Pagination>
+	{/if}
+{:else if searched}
+	<p class="no-seed">No seed found...</p>
 {:else}
-	<p>No seed found...</p>
-	<p>
-		Want example? <button class="inline-button" onclick={loadExampleSeed}>Load Seed 0</button>
-	</p>
+	<p>Search for a seed first!</p>
 {/if}
 
 <style>
-	.inline-button {
-		width: unset;
-	}
-
 	.seed-list {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+		margin-block: var(--size-4);
 	}
 	.result-header {
 		margin-top: 2.5rem;
@@ -150,5 +158,9 @@
 		syntax: '<number>';
 		initial-value: 0;
 		inherits: false;
+	}
+
+	.no-seed {
+		color: var(--text-2);
 	}
 </style>

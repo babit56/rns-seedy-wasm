@@ -34,12 +34,15 @@
 	let area_2 = $state('');
 	let area_3 = $state('');
 
+	// Area searches find >5000 but item searches cap at ~3500... Compromise for performance!
+	const maxSeedSearch = 5000;
+
 	function get_seed_data() {
 		// Rough match for possibly matching seeds
 		let matchCount = 0;
 		const matched_seeds = seed_data.filter((seed) => {
-			// DEBUG: Just grab the first 50
-			if (matchCount >= 50) {
+			// Limit the number of seeds to match to (Surely you won't be looking through over 5000 seeds...)
+			if (matchCount >= maxSeedSearch) {
 				return false;
 			}
 

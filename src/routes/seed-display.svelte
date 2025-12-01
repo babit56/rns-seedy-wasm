@@ -1,5 +1,6 @@
 <script lang="ts">
 	import IconArrowFatRightFill from 'phosphor-icons-svelte/IconArrowFatRightFill.svelte';
+	import IconShareBold from 'phosphor-icons-svelte/IconShareBold.svelte';
 	import {
 		id_to_icon,
 		area_to_icon,
@@ -7,14 +8,39 @@
 		id_to_gem_icon,
 		id_to_potion_icon,
 		area_to_color,
-		type AreaName
+		type AreaName,
+		type GemName
 	} from '$lib/item-map';
 	import { Seed } from '$lib/seed';
+	import { Tooltip } from 'bits-ui';
+	import BnyTooltip from './bny-tooltip.svelte';
+	import { toast } from '@zerodevx/svelte-toast';
 	type Props = {
 		seed: Seed;
 		playerCount: number;
 		compact: boolean;
 	};
+
+	async function copySeedLink() {
+		const seedUrl = new URL(window.location.origin);
+		seedUrl.searchParams.set('seed', String(seed.id));
+
+		const possibleBarColors: GemName[] = ['white', 'opal', 'sapphire', 'ruby', 'garnet', 'emerald'];
+		const barColor = possibleBarColors[Math.floor(Math.random() * possibleBarColors.length)];
+
+		if ('clipboard' in navigator) {
+			await navigator.clipboard.writeText(seedUrl.toString());
+
+			toast.push('Copied seed to clipboard!', {
+				theme: {
+					'--toastBackground': `var(--surface-${barColor})`,
+					'--toastBarBackground': `var(--color-${barColor})`
+				}
+			});
+		} else {
+			toast.push("Your browser doesn't support copying to the clipboard...");
+		}
+	}
 
 	let { seed, playerCount = $bindable(), compact }: Props = $props();
 </script>
@@ -149,8 +175,22 @@
 	<img class="inline-icon" {src} {alt} />
 {/snippet}
 
-<div class="seed-entry" class:compact>
-	<h3>Seed {seed.id} ({playerCount}p)</h3>
+<article class="seed-entry" class:compact>
+	<header>
+		<h3>Seed {seed.id} ({playerCount}p)</h3>
+		<Tooltip.Provider delayDuration={0} disableCloseOnTriggerClick={false}>
+			<BnyTooltip triggerProps={{ class: 'share-button-root blank-button' }}>
+				{#snippet trigger()}
+					<button class="share-button light-button" onclick={copySeedLink}>
+						<IconShareBold />
+					</button>
+				{/snippet}
+				{#snippet children()}
+					<p>Copy seed URL</p>
+				{/snippet}
+			</BnyTooltip>
+		</Tooltip.Provider>
+	</header>
 	<h4>
 		Areas {@render inlineIcon(`images/areas/${area_to_icon('extra_moonlit_prescipice')}.webp`)}
 	</h4>
@@ -183,12 +223,29 @@
 	{@render shop(2, seed.areaName(2))}
 	<p class="shop-label">Pale Keep</p>
 	{@render shop(3, 'extra_pale_keep')}
-</div>
+</article>
 
 <style>
+	header {
+		position: relative;
+	}
+
 	h3 {
 		text-align: center;
 		max-inline-size: unset;
+	}
+
+	:global(.share-button-root) {
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: unset;
+	}
+
+	.share-button {
+		padding: var(--size-2);
+		font-size: var(--font-size-3);
+		color: var(--text-2);
 	}
 
 	h4 {

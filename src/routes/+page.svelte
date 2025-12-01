@@ -1,7 +1,7 @@
 <script lang="ts">
 	import PlayerCount from './player-count.svelte';
 	import SeedDisplay from './seed-display.svelte';
-	import { Seed } from '$lib/seed';
+	import { Seed, urlSeed } from '$lib/seed';
 	import type { SeedData } from '$lib/item-map';
 	import { onMount } from 'svelte';
 	import SeedInProgress from './seed-in-progress.svelte';
@@ -41,7 +41,7 @@
 	let compactSeeds = $state(false);
 </script>
 
-<Tabs.Root value="progress">
+<Tabs.Root value={urlSeed !== null ? 'select' : 'progress'}>
 	<Tabs.List class="tab-list">
 		<Tabs.Trigger value="progress" class="outlined-button tab-button">
 			Seed-In-Progress Finder

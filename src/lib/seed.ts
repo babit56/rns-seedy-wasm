@@ -1,5 +1,11 @@
 import chest_data from '$lib/chest-data.json'; // slightly smaller BOYE
 import type { SeedData } from '$lib/item-map';
+import { browser } from '$app/environment';
+
+// Page seed data for use elsewhere
+const urlParams = browser ? new URLSearchParams(window.location.search) : undefined;
+const urlSeedString = urlParams?.get('seed') ?? null;
+export const urlSeed = urlSeedString ? Number(urlSeedString) : null;
 
 import {
 	area_to_name,

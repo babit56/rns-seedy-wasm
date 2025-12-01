@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { RatingGroup, Tooltip, type WithoutChildrenOrChild } from 'bits-ui';
+	import BnyTooltip from './bny-tooltip.svelte';
 
 	let {
 		value = $bindable(0),
@@ -47,8 +48,8 @@
 			<Tooltip.Provider delayDuration={0} disableCloseOnTriggerClick={true}>
 				{#each items as item (item.index)}
 					<RatingGroup.Item index={item.index}>
-						<Tooltip.Root>
-							<Tooltip.Trigger style=" all:unset">
+						<BnyTooltip triggerProps={{ style: `all: unset; ` }}>
+							{#snippet trigger()}
 								<img
 									src={item.state === 'inactive'
 										? 'images/rabbit.svg'
@@ -59,21 +60,19 @@
 									class:jumping={jumping && item.index < value}
 									style={`--bnuuy-color: var(--color-${bnuuyColors.at(item.index)}); --bnuuy-index: ${value - item.index}`}
 								/>
-							</Tooltip.Trigger>
-							<Tooltip.Portal>
-								<Tooltip.Content>
-									<div
-										class="bnuuy-quote"
-										style={`--bnuuy-color: var(--color-${bnuuyColors.at(item.index)})`}
-									>
-										<Tooltip.Arrow style="color: var(--bnuuy-color)" />
-										<p>
-											{bnuuyQuote.at(item.index)}
-										</p>
-									</div>
-								</Tooltip.Content>
-							</Tooltip.Portal>
-						</Tooltip.Root>
+							{/snippet}
+							{#snippet children()}
+								<div
+									class="bnuuy-quote"
+									style={`--bnuuy-color: var(--color-${bnuuyColors.at(item.index)})`}
+								>
+									<Tooltip.Arrow style="color: var(--bnuuy-color)" />
+									<p>
+										{bnuuyQuote.at(item.index)}
+									</p>
+								</div>
+							{/snippet}
+						</BnyTooltip>
 					</RatingGroup.Item>
 				{/each}
 			</Tooltip.Provider>
@@ -143,36 +142,6 @@
 	}
 
 	.bnuuy-quote {
-		padding: var(--size-1) var(--size-2);
-		background-color: var(--surface-1);
-		border: 2px solid var(--surface-3);
-		border-radius: var(--size-2);
-		line-height: 1;
 		color: var(--bnuuy-color);
-		animation: slide-in 100ms var(--ease-1) forwards;
-	}
-	.player-count :global([data-state='closed']) {
-		animation: slide-out 100ms var(--ease-1) forwards;
-	}
-
-	@keyframes slide-in {
-		0% {
-			opacity: 0;
-			translate: 0 4px;
-		}
-		100% {
-			opacity: 1;
-			translate: 0 0;
-		}
-	}
-	@keyframes slide-out {
-		0% {
-			opacity: 1;
-			translate: 0 0;
-		}
-		100% {
-			opacity: 0;
-			translate: 0 4px;
-		}
 	}
 </style>

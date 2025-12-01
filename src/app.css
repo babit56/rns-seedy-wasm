@@ -27,6 +27,22 @@
 	--surface-overlay: color-mix(in lch, var(--surface-1), transparent 20%);
 }
 
+:root {
+	/* Toasts */
+	--toastContainerTop: auto;
+	--toastContainerRight: 2rem;
+	--toastContainerBottom: 2rem;
+	--toastWidth: auto;
+	--toastMinHeight: 0;
+	--toastMsgPadding: var(--size-2) var(--size-2) var(--size-2) var(--size-3);
+	--toastColor: var(--text-1);
+	--toastBackground: var(--surface-3);
+	--toastBorder: 1px solid var(--surface-4);
+	--toastBarBackground: var(--color-white);
+	--toastBoxShadow: var(--shadow-3);
+	--toastBarHeight: 2px;
+}
+
 :focus-visible {
 	outline-offset: 0;
 }
@@ -72,22 +88,22 @@ body:has(.loader:not(.hide)) {
 	overflow: hidden;
 }
 
-header,
-main,
-footer {
+body > header,
+body > main,
+body > footer {
 	padding: 1rem;
 	max-width: 1060px;
 	margin-inline: auto;
 	width: 100%;
 }
 
-header {
+body > header {
 	background-color: var(--surface-2);
 	box-shadow: var(--shadow-3);
 	margin-bottom: 1rem;
 }
 
-footer {
+body > footer {
 	margin-top: 2.5rem;
 }
 
@@ -162,16 +178,22 @@ button {
 	transition: background-color 100ms;
 
 	&:hover {
-		background-color: color-mix(in lch, var(--surface-4), transparent 95%);
+		background-color: color-mix(in lch, var(--surface-4), transparent 85%);
 	}
 	&:active {
-		background-color: color-mix(in lch, var(--surface-4), transparent 90%);
+		background-color: color-mix(in lch, var(--surface-4), transparent 80%);
 	}
 	&:disabled {
 		background-color: unset;
 		cursor: not-allowed;
 		color: var(--text-2);
 	}
+}
+
+.blank-button {
+	background-color: unset !important;
+	padding: 0;
+	margin: 0;
 }
 
 input:not([type='button'], [type='submit'], [type='reset']) {

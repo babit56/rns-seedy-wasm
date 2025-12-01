@@ -1,8 +1,8 @@
 <script lang="ts">
 	import LightDarkSwitcher from './light-dark-switcher.svelte';
-	import '../app.css';
 	import Loader from './loader.svelte';
-	import { browser } from '$app/environment';
+	import { SvelteToast } from '@zerodevx/svelte-toast';
+	import '../app.css';
 	let { children } = $props();
 </script>
 
@@ -17,6 +17,8 @@
 </svelte:head>
 
 <Loader />
+<SvelteToast options={{ intro: { x: 40 } }} />
+
 <header>
 	<h1>RnS Seedy</h1>
 	<LightDarkSwitcher />

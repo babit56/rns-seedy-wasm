@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Seed } from '$lib/seed';
+	import { Seed, urlSeed } from '$lib/seed';
 	import type { SeedData } from '$lib/item-map';
 
 	type Props = {
@@ -27,7 +27,14 @@
 		searched = false;
 	}
 
-	let seed = $state<number>(0);
+	let seed = $state<number>(urlSeed ?? 0);
+
+	// Auto search if given a seed
+	$effect(() => {
+		if (loading === false && seed !== null) {
+			get_seed_data();
+		}
+	});
 </script>
 
 <h2 class="page-title">Direct Seed Finder</h2>

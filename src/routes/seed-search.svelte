@@ -8,6 +8,7 @@
 		seed_data: SeedData[];
 		loading: boolean;
 		possible_seeds: Seed[];
+		searching?: boolean;
 		searched: boolean;
 	};
 
@@ -15,6 +16,7 @@
 		seed_data,
 		loading = $bindable(true),
 		possible_seeds = $bindable([]),
+		searching = $bindable(false),
 		searched = $bindable(false)
 	}: Props = $props();
 
@@ -50,6 +52,7 @@
 	const maxSeedSearch = 5000;
 
 	function get_seed_data() {
+		searching = true;
 		// Rough match for possibly matching seeds
 		let matchCount = 0;
 		const matched_seeds = seed_data.filter((seed) => {
@@ -81,6 +84,7 @@
 		});
 
 		possible_seeds = [...matched_seeds.map((s) => new Seed(s))];
+		searching = false;
 		searched = true;
 	}
 

@@ -21,6 +21,7 @@
 	let seed_data: SeedData[] = [];
 
 	let loading = $state(true);
+	let searching = $state(false);
 	let searched = $state(false);
 	let playerCount = $state(4);
 
@@ -58,7 +59,13 @@
 		<SeedSelect {seed_data} bind:possible_seeds={found_seeds} bind:searched bind:loading />
 	</Tabs.Content>
 	<Tabs.Content value="search">
-		<SeedSearch {seed_data} bind:possible_seeds={found_seeds} bind:searched bind:loading />
+		<SeedSearch
+			{seed_data}
+			bind:possible_seeds={found_seeds}
+			bind:searched
+			bind:loading
+			bind:searching
+		/>
 	</Tabs.Content>
 </Tabs.Root>
 <div class="results-header">
@@ -83,10 +90,17 @@
 	{#if showPagination}
 		<Pagination count={found_seeds.length} {perPage} bind:page={seedPage}></Pagination>
 	{/if}
-{:else if searched}
-	<p class="no-seed">No seed found...</p>
 {:else}
-	<p>Search for a seed first!</p>
+	<div class="search-loader">
+		{#if searching}
+			<img src="images/wizard_spin.gif" width="80" height="100" alt="Wizard Rabbit spinning" />
+			<p>Searching...</p>
+		{:else if searched}
+			<p>No seed found...</p>
+		{:else}
+			<p>Search for a seed above!</p>
+		{/if}
+	</div>
 {/if}
 
 <style>
@@ -220,7 +234,16 @@
 		inherits: false;
 	}
 
-	.no-seed {
+	.search-loader {
+		display: flex;
+		flex-direction: column;
+		gap: var(--size-2);
+		align-items: center;
+		padding: var(--size-4);
 		color: var(--text-2);
+		margin-top: var(--size-4);
+		background-color: var(--surface-1);
+		border: var(--border-size-1) solid var(--surface-2);
+		border-radius: var(--radius-2);
 	}
 </style>

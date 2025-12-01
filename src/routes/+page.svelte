@@ -1,8 +1,7 @@
 <script lang="ts">
 	import PlayerCount from './player-count.svelte';
 	import SeedDisplay from './seed-display.svelte';
-	import { type Seed } from '$lib/seed';
-	import { urlSeed } from '$lib/util';
+	import { urlSeed, urlTab } from '$lib/util';
 	import type { SeedData } from '$lib/item-map';
 	import { onMount } from 'svelte';
 	import SeedInProgress from './seed-in-progress.svelte';
@@ -17,6 +16,19 @@
 		seed_data = await (await fetch('data/seed-data.json')).json(); // Static assets makes the IDE happy
 		loading = false;
 	});
+
+	const tabList = ['progress', 'select', 'search'] as const;
+	type AppTab = (typeof tabList)[number];
+
+	const seedTab: AppTab | null = urlSeed !== null ? 'select' : null;
+	const urlTabName: AppTab | null = urlTab
+		? tabList.includes(urlTab as AppTab)
+			? (urlTab as AppTab)
+			: null
+		: null;
+	const initialTab: AppTab = seedTab ?? urlTabName ?? 'progress';
+
+	let currentTab = $state(initialTab);
 
 	// Cannot be a rune for performance reasons...
 	// svelte-ignore non_reactive_update
@@ -37,17 +49,42 @@
 		seedPage = 1;
 	});
 
+	// Sync url search parameters
+	$effect(() => {
+		const tabbedUrl = new URL(window.location.href);
+		if (currentTab === 'progress') {
+			tabbedUrl.searchParams.delete('tab');
+		} else {
+			tabbedUrl.searchParams.set('tab', currentTab);
+		}
+
+		window.history.pushState({}, '', tabbedUrl);
+	});
+
+	// Sync seed if a single result is returned
+	$effect(() => {
+		if (found_seeds.length !== 1) {
+			const noSeedUrl = new URL(window.location.href);
+			noSeedUrl.searchParams.delete('seed');
+
+			window.history.pushState({}, '', noSeedUrl);
+		} else {
+			const seedUrl = new URL(window.location.href);
+			seedUrl.searchParams.set('seed', String(found_seeds[0][0]));
+
+			window.history.pushState({}, '', seedUrl);
+		}
+	});
+
 	let showPagination = $derived(found_seeds.length > perPage);
 	let seedWindow = $derived(found_seeds.slice(perPage * (seedPage - 1), perPage * seedPage));
 
 	let compactSeeds = $state(false);
 
-	let overSearchLimit = $derived(!fullSearch && found_seeds.length === 5000);
-	let truncatedSearchIsSignificant = $derived(!fullSearch && found_seeds.length > 50);
-	let showPercentage = $derived(truncatedSearchIsSignificant || fullSearch);
+	let showPercentage = $derived(found_seeds.length > 50);
 </script>
 
-<Tabs.Root value={urlSeed !== null ? 'select' : 'progress'}>
+<Tabs.Root bind:value={currentTab}>
 	<Tabs.List class="tab-list">
 		<Tabs.Trigger value="progress" class="outlined-button tab-button">
 			Seed-In-Progress Finder

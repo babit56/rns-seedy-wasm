@@ -44,6 +44,10 @@ export type SeedTTT = {
 	chests: Chest[];
 };
 
+// Instantiating this class is currently a pretty slow process and takes
+// most of the time when changing pages. To improve this, I will have to run a
+// Worker thread in the background to preload seeds, but like I doubt anyone
+// cares. Lmao.
 export class Seed {
 	public readonly id: number;
 	private shops: Shop[];

@@ -30,7 +30,7 @@
 		src="images/wizard_fly.gif"
 		width="500"
 		height="500"
-		alt="Wizard Rabbit spinning"
+		alt="Wizard Rabbit flying"
 		class="wizard wizard-fly"
 	/>
 	<img

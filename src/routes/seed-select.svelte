@@ -30,8 +30,11 @@
 	let seed = $state<number>(urlSeed ?? 0);
 
 	// Auto search if given a seed
+	let firstLoadSearch = urlSeed !== null;
 	$effect(() => {
-		if (loading === false && seed !== null) {
+		if (loading === false && firstLoadSearch === true) {
+			firstLoadSearch = false;
+			console.log(urlSeed, loading);
 			get_seed_data();
 		}
 	});

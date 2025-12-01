@@ -24,6 +24,7 @@
 	let loading = $state(true);
 	let searching = $state(false);
 	let searched = $state(false);
+	let fullSearch = $state(false);
 	let playerCount = $state(4);
 
 	let seedPage = $state(1);
@@ -41,6 +42,10 @@
 	let seedWindow = $derived(found_seeds.slice(perPage * (seedPage - 1), perPage * seedPage));
 
 	let compactSeeds = $state(false);
+
+	let overSearchLimit = $derived(!fullSearch && found_seeds.length === 5000);
+	let truncatedSearchIsSignificant = $derived(!fullSearch && found_seeds.length > 50);
+	let showPercentage = $derived(truncatedSearchIsSignificant || fullSearch);
 </script>
 
 <Tabs.Root value={urlSeed !== null ? 'select' : 'progress'}>
@@ -66,12 +71,18 @@
 			bind:searched
 			bind:loading
 			bind:searching
+			bind:fullSearch
 		/>
 	</Tabs.Content>
 </Tabs.Root>
 <div class="results-header">
 	<h2>
-		Results {#if searched}<span class="results-count">({found_seeds.length})</span>{/if}
+		Results {#if searched || searching}<span class="results-count"
+				>({found_seeds.length}{#if overSearchLimit}+{:else if showPercentage}&nbsp;:&nbsp;{(
+						(found_seeds.length * 100) /
+						seed_data.length
+					).toFixed(2)}%{/if})</span
+			>{/if}
 	</h2>
 	<div class="results-options">
 		<div class="results-options-bg"></div>

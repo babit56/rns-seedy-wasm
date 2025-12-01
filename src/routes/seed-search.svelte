@@ -10,6 +10,7 @@
 		seed_data: SeedData[];
 		loading: boolean;
 		possible_seeds: Seed[];
+		fullSearch?: boolean;
 		searching?: boolean;
 		searched: boolean;
 	};
@@ -18,6 +19,7 @@
 		seed_data,
 		loading = $bindable(true),
 		possible_seeds = $bindable([]),
+		fullSearch = $bindable(false),
 		searching = $bindable(false),
 		searched = $bindable(false)
 	}: Props = $props();
@@ -48,20 +50,20 @@
 	let gem_3_id = $derived(gem_to_id(gem_3, 2));
 	let gem_4_id = $derived(gem_to_id(gem_4, 3));
 
-	let showAllSeeds = $state(false);
-
 	// Area searches find >5000 but item searches cap at ~3500... Compromise for performance!
 	const maxSeedSearch = 5000;
 
 	function get_seed_data() {
 		if (searching) return;
 
+		possible_seeds = [];
 		searching = true;
+
 		// Rough match for possibly matching seeds
 		let matchCount = 0;
 		const matched_seeds = seed_data.filter((seed) => {
 			// Limit the number of seeds to match to (Surely you won't be looking through over 5000 seeds...)
-			if (!showAllSeeds && matchCount >= maxSeedSearch) {
+			if (!fullSearch && matchCount >= maxSeedSearch) {
 				return false;
 			}
 
@@ -170,53 +172,58 @@
 			<legend>Items</legend>
 			<div class="combobox-aligned-input">
 				<p class="combobox-label">Item 1</p>
-				<Combobox type="single" {items} bind:value={item_1} />
+				<Combobox type="single" {items} bind:value={item_1} disabled={searching} />
 				<p class="combobox-label">Item 2</p>
-				<Combobox type="single" {items} bind:value={item_2} />
+				<Combobox type="single" {items} bind:value={item_2} disabled={searching} />
 				<p class="combobox-label">Item 3</p>
-				<Combobox type="single" {items} bind:value={item_3} />
+				<Combobox type="single" {items} bind:value={item_3} disabled={searching} />
 				<p class="combobox-label">Item 4</p>
-				<Combobox type="single" {items} bind:value={item_4} />
+				<Combobox type="single" {items} bind:value={item_4} disabled={searching} />
 				<p class="combobox-label">Item 5</p>
-				<Combobox type="single" {items} bind:value={item_5} />
+				<Combobox type="single" {items} bind:value={item_5} disabled={searching} />
 				<p class="combobox-label">Item 6</p>
-				<Combobox type="single" {items} bind:value={item_6} />
+				<Combobox type="single" {items} bind:value={item_6} disabled={searching} />
 			</div>
 		</fieldset>
 		<fieldset class="input-area">
 			<legend>Areas</legend>
 			<div class="combobox-aligned-input">
 				<p class="combobox-label">Area 1</p>
-				<Combobox type="single" items={areas} bind:value={area_1} />
+				<Combobox type="single" items={areas} bind:value={area_1} disabled={searching} />
 				<p class="combobox-label">Area 2</p>
-				<Combobox type="single" items={areas} bind:value={area_2} />
+				<Combobox type="single" items={areas} bind:value={area_2} disabled={searching} />
 				<p class="combobox-label">Area 3</p>
-				<Combobox type="single" items={areas} bind:value={area_3} />
+				<Combobox type="single" items={areas} bind:value={area_3} disabled={searching} />
 			</div>
 		</fieldset>
 		<fieldset class="input-area">
 			<legend>Shop gems</legend>
 			<div class="combobox-aligned-input">
 				<p class="combobox-label">Primary Gem</p>
-				<Combobox type="single" items={gems} bind:value={gem_1} />
+				<Combobox type="single" items={gems} bind:value={gem_1} disabled={searching} />
 				<p class="combobox-label">Secondary Gem</p>
-				<Combobox type="single" items={gems} bind:value={gem_2} />
+				<Combobox type="single" items={gems} bind:value={gem_2} disabled={searching} />
 				<p class="combobox-label">Special Gem</p>
-				<Combobox type="single" items={gems} bind:value={gem_3} />
+				<Combobox type="single" items={gems} bind:value={gem_3} disabled={searching} />
 				<p class="combobox-label">Defensive Gem</p>
-				<Combobox type="single" items={gems} bind:value={gem_4} />
+				<Combobox type="single" items={gems} bind:value={gem_4} disabled={searching} />
 			</div>
 		</fieldset>
 		<div class="switch">
 			<Switch
-				labelText={showAllSeeds ? 'Show ALL seeds (LAGGY)' : `Show first ${maxSeedSearch} seeds`}
-				bind:checked={showAllSeeds}
+				labelText={fullSearch ? 'Show ALL seeds (LAGGY)' : `Show first ${maxSeedSearch} seeds`}
+				disabled={searching}
+				bind:checked={fullSearch}
 			/>
 		</div>
 		<div class="button-group">
-			<button class="action-button" disabled={loading} onclick={get_seed_data}>Search</button>
-			<button class="action-button outlined-button" disabled={loading} onclick={reset_seed_data}
-				>Reset</button
+			<button class="action-button" disabled={loading || searching} onclick={get_seed_data}
+				>Search</button
+			>
+			<button
+				class="action-button outlined-button"
+				disabled={loading || searching}
+				onclick={reset_seed_data}>Reset</button
 			>
 		</div>
 	</section>

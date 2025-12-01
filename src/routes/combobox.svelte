@@ -2,7 +2,6 @@
 	import { Combobox, type WithoutChildrenOrChild, mergeProps } from 'bits-ui';
 	import IconCaretDownBold from 'phosphor-icons-svelte/IconCaretDownBold.svelte';
 	import Fuse from 'fuse.js';
-	import { browser } from '$app/environment';
 
 	type Props = Combobox.RootProps & {
 		inputProps?: WithoutChildrenOrChild<Combobox.InputProps>;
@@ -39,14 +38,7 @@
 	let inputRef = $state<HTMLInputElement | null>(null);
 </script>
 
-<Combobox.Root
-	{type}
-	{items}
-	bind:value={value as never}
-	bind:open
-	disabled={!browser}
-	{...mergedRootProps}
->
+<Combobox.Root {type} {items} bind:value={value as never} bind:open {...mergedRootProps}>
 	<div class="combobox-input-container">
 		<Combobox.Input
 			clearOnDeselect={true}

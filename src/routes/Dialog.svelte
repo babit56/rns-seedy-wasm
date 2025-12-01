@@ -44,13 +44,13 @@
 
 <style>
 	:global(.dialog-overlay) {
-		position: absolute;
+		position: fixed;
 		inset: 0;
 		background-color: var(--surface-overlay);
 	}
 
 	:global(.dialog-content) {
-		position: absolute;
+		position: fixed;
 		width: 400px;
 		max-width: calc(100vw - 2rem);
 		left: 50%;

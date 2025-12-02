@@ -96,6 +96,8 @@
 		display: grid;
 		place-items: center;
 		width: 150%;
+
+		overflow-x: clip;
 		mask-image: linear-gradient(90deg, transparent, black 30%, black 70%, transparent);
 	}
 

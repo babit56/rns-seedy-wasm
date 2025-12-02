@@ -11,6 +11,7 @@
 	import Pagination from './pagination.svelte';
 	import Switch from './switch.svelte';
 	import WizardSpinner from './wizard-spinner.svelte';
+	import WizardKo from './wizard-ko.svelte';
 
 	onMount(async () => {
 		seed_data = await (await fetch('data/seed-data.json')).json(); // Static assets makes the IDE happy
@@ -134,6 +135,7 @@
 {:else}
 	<div class="search-loader">
 		{#if searched}
+			<WizardKo />
 			<p>No seed found...</p>
 		{:else}
 			<WizardSpinner />

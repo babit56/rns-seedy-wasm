@@ -11,6 +11,7 @@
 		'extra_pale_keep',
 		'extra_moonlit_prescipice'
 	];
+	const spinOffsetSync = (Date.now() % 8000) / 8000;
 </script>
 
 <div class="wizard-spinner-root">
@@ -25,6 +26,16 @@
 				alt="Area icon"
 			/>
 		{/each}
+	</div>
+	<div class="flight-ring-root">
+		<img
+			width="315"
+			height="478"
+			src="images/flight_ring.png"
+			style={`--spin-offset: ${spinOffsetSync}`}
+			alt="Flight Ring"
+			class="flight-ring"
+		/>
 	</div>
 	<img
 		src="images/wizard_fly.gif"
@@ -46,6 +57,8 @@
 	.wizard-spinner-root {
 		display: grid;
 		place-items: center;
+		min-height: 100px;
+		min-width: 100px;
 	}
 
 	.wizard {
@@ -64,6 +77,18 @@
 	.wizard-spin {
 		display: block;
 		animation: start-hidden 800ms linear;
+	}
+
+	.flight-ring-root {
+		width: 100px;
+		height: 100px;
+		position: absolute;
+		animation: fly-in 800ms cubic-bezier(0.5, 1, 0.89, 1);
+	}
+
+	.flight-ring {
+		translate: 0 4px;
+		animation: spin 8000ms linear infinite;
 	}
 
 	.areas {
@@ -98,6 +123,15 @@
 		100% {
 			translate: 0 0;
 			opacity: 1;
+		}
+	}
+
+	@keyframes spin {
+		0% {
+			rotate: calc(var(--spin-offset) * 1turn);
+		}
+		100% {
+			rotate: calc(var(--spin-offset) * 1turn + 1turn);
 		}
 	}
 

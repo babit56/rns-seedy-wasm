@@ -31,27 +31,27 @@
 </script>
 
 {#if browser}
-	{#if mode === 'idle'}
-		<div class="rabbit-root">
-			<div class="areas">
-				{#each areaList as areaName, index}
-					<img
-						width="100"
-						height="95"
-						class="area-icon"
-						src={`images/areas/${area_to_icon(areaName)}.webp`}
-						style={`--slide-offset: ${index}`}
-						alt="Area icon"
-					/>
-				{/each}
-			</div>
-			<div class="flight-ring-root">
-				<div
-					class="flight-ring"
-					style={`--spin-offset: ${spinOffsetSync}; --character-color:
+	<div class="rabbit-root">
+		<div class="areas" class:hide={mode === 'error'}>
+			{#each areaList as areaName, index}
+				<img
+					width="100"
+					height="95"
+					class="area-icon"
+					src={`images/areas/${area_to_icon(areaName)}.webp`}
+					style={`--slide-offset: ${index}`}
+					alt="Area icon"
+				/>
+			{/each}
+		</div>
+		<div class="flight-ring-root" class:fly-in={mode === 'idle'}>
+			<div
+				class="flight-ring"
+				style={`--spin-offset: ${spinOffsetSync}; --character-color:
 ${character.color};`}
-				></div>
-			</div>
+			></div>
+		</div>
+		{#if mode === 'idle'}
 			<img
 				src={`images/characters/${character.name}_fly.gif`}
 				width={character.width}
@@ -66,14 +66,7 @@ ${character.color};`}
 				alt="Rabbit spinning"
 				class="rabbit rabbit-spin"
 			/>
-		</div>
-	{:else if mode === 'error'}
-		<div class="rabbit-root">
-			<div
-				class="flight-ring"
-				style={`--spin-offset: ${spinOffsetSync}; --character-color:
-${character.color};`}
-			></div>
+		{:else if mode === 'error'}
 			<img
 				src={`images/characters/${character.name}_hit.png`}
 				width={character.width}
@@ -88,8 +81,8 @@ ${character.color};`}
 				alt="Rabbit knocked out"
 				class="rabbit rabbit-ko"
 			/>
-		</div>
-	{/if}
+		{/if}
+	</div>
 {/if}
 
 <style>
@@ -135,7 +128,9 @@ ${character.color};`}
 		width: 100px;
 		height: 100px;
 		position: absolute;
-		animation: fly-in 800ms cubic-bezier(0.5, 1, 0.89, 1);
+		&.fly-in {
+			animation: fly-in 800ms cubic-bezier(0.5, 1, 0.89, 1);
+		}
 	}
 
 	.flight-ring {
@@ -157,6 +152,14 @@ ${character.color};`}
 
 		overflow-x: clip;
 		mask-image: linear-gradient(90deg, transparent, black 30%, black 70%, transparent);
+		transition:
+			display 800ms allow-discrete,
+			opacity 800ms ease-in;
+
+		&.hide {
+			opacity: 0;
+			display: none;
+		}
 	}
 
 	.area-icon {

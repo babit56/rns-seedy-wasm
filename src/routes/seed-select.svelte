@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { urlSeed } from '$lib/util';
 	import type { SeedData } from '$lib/item-map';
+	import { predict_seed } from 'rnssp-wasm';
 
 	type Props = {
 		seed_data: SeedData[];
@@ -25,6 +26,12 @@
 	function reset_seed_data() {
 		possible_seeds = [];
 		searched = false;
+		// Change seed data
+		const start = Date.now();
+		console.log("Changing seed data");
+		seed_data = seed_data.map((s) => predict_seed(s[0], 4, false))
+		const ms = Date.now() - start;
+		console.log(`Changed data in ${ms / 1000} seconds`);
 	}
 
 	let seed = $state<number>(urlSeed ?? 0);

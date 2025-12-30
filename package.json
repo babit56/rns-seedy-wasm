@@ -30,6 +30,9 @@
 	"dependencies": {
 		"bits-ui": "^2.14.4",
 		"fuse.js": "^7.1.0",
-		"open-props": "^1.7.16"
+		"open-props": "^1.7.16",
+		"rnssp-wasm": "file:rnssp-wasm/pkg",
+		"vite-plugin-top-level-await": "^1.6.0",
+		"vite-plugin-wasm": "^3.5.0"
 	}
 }

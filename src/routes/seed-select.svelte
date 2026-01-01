@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { urlSeed } from '$lib/util';
 	import type { SeedData } from '$lib/item-map';
-	import { predict_seed } from 'rnssp-wasm';
+	import { Unlocks, predict_seed, new_seed_data } from 'rnssp-wasm';
 
 	type Props = {
 		seed_data: SeedData[];
+		playerCount: number;
 		loading: boolean;
 		possible_seeds: SeedData[];
 		searched: boolean;
@@ -12,6 +13,7 @@
 
 	let {
 		seed_data,
+		playerCount = $bindable(),
 		loading = $bindable(true),
 		possible_seeds = $bindable([]),
 		searched = $bindable(false)
@@ -20,6 +22,10 @@
 	function get_seed_data() {
 		const foundSeed = seed_data.filter((s) => s[0] === seed).at(0);
 		possible_seeds = foundSeed ? [foundSeed] : [];
+		// Get unlocks from somewhere
+		// const unlocks = Unlocks.new(false, false, false, false, false, false, false, false, false, false);
+		// Generate seed on the fly
+		// possible_seeds = [predict_seed(seed, playerCount, true, unlocks)];
 		searched = true;
 	}
 
@@ -27,9 +33,17 @@
 		possible_seeds = [];
 		searched = false;
 		// Change seed data
+		const unlocks = Unlocks.new(false, false, false, false, false, false, false, false, false, false);
 		const start = Date.now();
 		console.log("Changing seed data");
-		seed_data = seed_data.map((s) => predict_seed(s[0], 4, false))
+
+		// Change seed data
+		seed_data = seed_data.map((s) => predict_seed(s[0], 4, true, unlocks))
+
+		// Other option, runtime seems to be equal. Further benchmarking probably needed
+		// const unique_seeds = seed_data.map((s) => s[0]);
+		// console.log(new_seed_data(unique_seeds, 4, true, unlocks));
+
 		const ms = Date.now() - start;
 		console.log(`Changed data in ${ms / 1000} seconds`);
 	}

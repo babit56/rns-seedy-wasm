@@ -66,6 +66,8 @@ checksum = "645cbb3a84e60b7531617d5ae4e57f7e27308f6445f5abf653209ea76dec8dff"
 [[package]]
 name = "gamemaker-rand"
 version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6b395cca4356d4fd73a8249a252f8c3d6f58706546f0d8e5a609e0673a7f80b6"
 
 [[package]]
 name = "itoa"
@@ -159,6 +161,7 @@ name = "rnssp"
 version = "0.1.0"
 dependencies = [
  "gamemaker-rand",
+ "serde",
 ]
 
 [[package]]

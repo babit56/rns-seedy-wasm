@@ -98,7 +98,7 @@
 		<SeedInProgress {seed_data} bind:possible_seeds={found_seeds} bind:searched bind:loading />
 	</Tabs.Content>
 	<Tabs.Content value="select">
-		<SeedSelect {seed_data} bind:possible_seeds={found_seeds} bind:searched bind:loading />
+		<SeedSelect {seed_data} {playerCount} bind:possible_seeds={found_seeds} bind:searched bind:loading />
 	</Tabs.Content>
 	<Tabs.Content value="search">
 		<SeedSearch {seed_data} bind:possible_seeds={found_seeds} bind:searched bind:loading />

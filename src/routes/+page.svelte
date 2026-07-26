@@ -1,7 +1,8 @@
 <script lang="ts">
 	import PlayerCount from './player-count.svelte';
 	import SeedDisplay from './seed-display.svelte';
-	import { urlSeed, urlTab } from '$lib/util';
+	import { urlSeed, urlTab, urlDiff, urlArea, urlUnlocks,
+		copySettings, settingsHavePrecalc, getPrecalcFile } from '$lib/util';
 	import type { SeedData } from '$lib/item-map';
 	import { onMount } from 'svelte';
 	import SeedInProgress from './seed-in-progress.svelte';
@@ -11,13 +12,19 @@
 	import Pagination from './pagination.svelte';
 	import Switch from './switch.svelte';
 	import RabbitSpinner from './rabbit-spinner.svelte';
+	import Settings from './settings.svelte';
+	import { Unlocks, StartingArea } from 'rnssp-wasm';
 
 	onMount(async () => {
-		seed_data = await (await fetch('data/seed-data.json')).json(); // Static assets makes the IDE happy
+		let resource = 'data/rand-area-0-highdiff.json';
+		if (settingsHavePrecalc(settings)) {
+			resource = getPrecalcFile(settings);
+		}
+		seed_data = await (await fetch(resource)).json(); // Static assets makes the IDE happy
 		loading = false;
 	});
 
-	const tabList = ['progress', 'select', 'search'] as const;
+	const tabList = ['progress', 'select', 'search', 'settings'] as const;
 	type AppTab = (typeof tabList)[number];
 
 	const seedTab: AppTab | null = urlSeed !== null ? 'select' : null;
@@ -28,6 +35,12 @@
 		: null;
 	const initialTab: AppTab = seedTab ?? urlTabName ?? 'progress';
 
+	const initialSettings: Settings = {
+		difficulty: urlDiff ?? 3,
+		starting_area: urlArea ?? StartingArea.RandomKingdom,
+		unlocks: urlUnlocks ?? Unlocks.full(),
+	}
+
 	let currentTab = $state(initialTab);
 
 	// Cannot be a rune for performance reasons...
@@ -37,6 +50,21 @@
 	let loading = $state(true);
 	let searched = $state(false);
 	let playerCount = $state(4);
+	let settings = $state({
+		difficulty: initialSettings.difficulty,
+		starting_area: initialSettings.starting_area,
+		unlocks: initialSettings.unlocks.copy(),
+	});
+	let pendingSettings = $state({
+		difficulty: initialSettings.difficulty,
+		starting_area: initialSettings.starting_area,
+		unlocks: initialSettings.unlocks.copy(),
+	});
+	let lastSearchSettings = $state({
+		difficulty: initialSettings.difficulty,
+		starting_area: initialSettings.starting_area,
+		unlocks: initialSettings.unlocks.copy(),
+	});
 
 	let seedPage = $state(1);
 	let perPage = 10;
@@ -95,13 +123,13 @@
 		<Tabs.Trigger value="search" class="outlined-button tab-button">End Seed Searcher</Tabs.Trigger>
 	</Tabs.List>
 	<Tabs.Content value="progress">
-		<SeedInProgress {seed_data} bind:possible_seeds={found_seeds} bind:searched bind:loading />
+		<SeedInProgress {seed_data} bind:possible_seeds={found_seeds} {settings} bind:lastSearchSettings bind:searched bind:loading />
 	</Tabs.Content>
 	<Tabs.Content value="select">
-		<SeedSelect {seed_data} {playerCount} bind:possible_seeds={found_seeds} bind:searched bind:loading />
+		<SeedSelect {seed_data} {playerCount} settings={pendingSettings} bind:lastSearchSettings bind:possible_seeds={found_seeds} bind:searched bind:loading />
 	</Tabs.Content>
 	<Tabs.Content value="search">
-		<SeedSearch {seed_data} bind:possible_seeds={found_seeds} bind:searched bind:loading />
+		<SeedSearch {seed_data} bind:possible_seeds={found_seeds} {settings} bind:lastSearchSettings bind:searched bind:loading />
 	</Tabs.Content>
 </Tabs.Root>
 <div class="results-header">
@@ -117,6 +145,7 @@
 		<div class="results-options-bg"></div>
 		<Switch labelText="Compact" bind:checked={compactSeeds} />
 		<PlayerCount bind:value={playerCount} />
+		<Settings bind:seed_data bind:settings bind:pendingSettings bind:loading />
 	</div>
 </div>
 {#if found_seeds.length > 0}
@@ -125,7 +154,7 @@
 	{/if}
 	<div class="seed-list">
 		{#each seedWindow as seedData (seedData[0])}
-			<SeedDisplay {seedData} {playerCount} compact={compactSeeds} />
+			<SeedDisplay {seedData} {playerCount} settings={lastSearchSettings} compact={compactSeeds} />
 		{/each}
 	</div>
 	{#if showPagination}

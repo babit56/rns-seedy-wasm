@@ -1,7 +1,7 @@
-import chest_data from '$lib/chest-data.json'; // slightly smaller BOYE
 import type { SeedData } from '$lib/item-map';
 
 import {
+	areaShortNameMap,
 	area_to_name,
 	chest_to_color,
 	chest_to_color_label,
@@ -56,9 +56,9 @@ export class Seed {
 
 	constructor(seedData: SeedData) {
 		this.id = seedData[0];
-		this.areas = [1, 2, 3, 4, 5].map((i) => <AreaName>seedData[i]);
+		this.areas = [1, 2, 3, 4, 5].map((i) => areaShortNameMap[seedData[i]]);
 
-		const seedChests = (chest_data ?? []).find((chest) => chest[0] === this.id)?.slice(1);
+		const seedChests = seedData.slice(92);
 		this.chests = [0, 1, 2, 3, 4, 5].map((i) => ({
 			label: chest_to_color_label(seedChests?.at(i) ?? 2),
 			name: chest_to_color(seedChests?.at(i) ?? 2),

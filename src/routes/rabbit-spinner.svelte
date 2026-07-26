@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
-	import { area_to_icon, type AreaName } from '$lib/item-map';
+	import { area_to_icon } from '$lib/item-map';
 	import { currentLoadingCharacter as character } from '$lib/util';
 
 	type SpinnerMode = 'idle' | 'error';
@@ -11,14 +11,14 @@
 
 	let { mode = $bindable('idle') }: Props = $props();
 
-	const areaList: AreaName[] = [
-		'extra_outskirts',
+	const areaList: string[] = [
+		'hw_outskirts',
 		'hw_nest',
 		'hw_lighthouse',
 		'hw_arsenal',
 		'hw_streets',
 		'hw_lakeside',
-		'extra_pale_keep',
+		'hw_keep',
 		'extra_moonlit_prescipice'
 	];
 

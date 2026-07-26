@@ -3,11 +3,14 @@
 
 	import { name_to_id, itemList, gem_to_id } from '$lib/item-map';
 	import type { SeedData } from '$lib/item-map';
+	import { type Settings, copySettings } from '$lib/util';
 
 	type Props = {
 		seed_data: SeedData[];
 		loading: boolean;
 		possible_seeds: SeedData[];
+		settings: Settings;
+		lastSearchSettings: Settings;
 		searched: boolean;
 	};
 
@@ -15,6 +18,8 @@
 		seed_data,
 		loading = $bindable(true),
 		possible_seeds = $bindable([]),
+		settings = $bindable(),
+		lastSearchSettings = $bindable(),
 		searched = $bindable(false)
 	}: Props = $props();
 
@@ -32,6 +37,9 @@
 	let area_1 = $state('');
 	let area_2 = $state('');
 	let area_3 = $state('');
+	let area_1_id = $derived(Number(area_1));
+	let area_2_id = $derived(Number(area_2));
+	let area_3_id = $derived(Number(area_3));
 
 	let gem_1 = $state('');
 	let gem_2 = $state('');
@@ -53,8 +61,8 @@
 				seed[10] === item_5_id;
 			if (!all_items_match) return false;
 
-			const areasMatch = [area_1, area_2, area_3].every(
-				(id, index) => id === '' || seed.at(index + 1) === id // Blank = Match any
+			const areasMatch = [area_1_id, area_2_id, area_3_id].every(
+				(id, index) => id === 0 || seed.at(index + 2) === id // Blank = Match any
 			);
 			if (!areasMatch) return false;
 
@@ -72,6 +80,7 @@
 
 		possible_seeds = matched_seeds;
 		searched = true;
+		copySettings(lastSearchSettings, settings);
 	}
 
 	function reset_seed_data() {
@@ -87,15 +96,23 @@
 
 		possible_seeds = [];
 		searched = false;
+		copySettings(lastSearchSettings, settings);
 	}
 
 	const items = itemList.map((item) => ({ value: item, label: item }));
 	const areas = [
-		{ value: 'hw_nest', label: "Scholar's Nest (Crows)" },
-		{ value: 'hw_arsenal', label: "King's Arsenal (Wolves)" },
-		{ value: 'hw_lighthouse', label: 'Red Darkhosue (Dragons)' },
-		{ value: 'hw_streets', label: 'Churchmouse Streets (Mice)' },
-		{ value: 'hw_lakeside', label: 'Emerald Lakeside (Frogs)' }
+		// { value: 0, label: "Kingdom Outskirts" },
+		{ value: "1", label: "Scholar's Nest (Crows)" },
+		{ value: "2", label: "King's Aresenal (Wolves)" },
+		{ value: "3", label: "Red Darkhouse (Dragons)" },
+		{ value: "4", label: "Churchmouse Streets (Mice)" },
+		{ value: "5", label: "Emerald Lakeside (Frogs)" },
+		// { value: 6, label: "Moonlit Prescipice" },
+		// { value: 7, label: "Crack in the Geode" },
+		{ value: "8", label: "Subterra Sanctum" },
+		{ value: "9", label: "Darkhouse Depths" },
+		{ value: "10", label: "Atelier Aurum" },
+		// { value: 11, label: "Looping Hallway" },
 	];
 	const gems = ['Opal', 'Sapphire', 'Ruby', 'Garnet', 'Emerald'].map((item) => ({
 		value: item,

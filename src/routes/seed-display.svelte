@@ -4,11 +4,11 @@
 	import {
 		id_to_icon,
 		area_to_icon,
+		starting_area_to_icon,
 		area_to_name,
 		id_to_gem_icon,
 		id_to_potion_icon,
 		area_to_color,
-		type AreaName,
 		type GemName,
 		type SeedData
 	} from '$lib/item-map';
@@ -16,26 +16,43 @@
 	import { Tooltip } from 'bits-ui';
 	import BnyTooltip from './bny-tooltip.svelte';
 	import { toast } from '@zerodevx/svelte-toast';
+	import { difficulty_to_icon, type Settings } from '$lib/util';
+	import { Unlocks, StartingArea } from 'rnssp-wasm';
 
 	type Props = {
 		seedData: SeedData;
 		playerCount: number;
+		settings: Settings;
 		compact: boolean;
 	};
 
-	let { seedData, playerCount = $bindable(), compact }: Props = $props();
+	let {
+		seedData,
+		playerCount = $bindable(),
+		settings,
+		compact
+	}: Props = $props();
 
-	const seed = new Seed(seedData);
+	const seed = $derived(new Seed(seedData));
 
 	async function copySeedLink() {
-		const seedUrl = new URL(window.location.href);
-		seedUrl.searchParams.set('seed', String(seed.id));
+		const url = new URL(window.location.href);
+		url.searchParams.set('seed', String(seed.id));
+		if (settings.difficulty !== 3) {
+			url.searchParams.set('settings.difficulty', String(settings.difficulty));
+		}
+		if (settings.starting_area !== StartingArea.RandomKingdom) {
+			url.searchParams.set('area', String(settings.starting_area));
+		}
+		if (!settings.unlocks.is_full()) {
+			url.searchParams.set('unlocks', settings.unlocks.get_bitstring());
+		}
 
 		const possibleBarColors: GemName[] = ['white', 'opal', 'sapphire', 'ruby', 'garnet', 'emerald'];
 		const barColor = possibleBarColors[Math.floor(Math.random() * possibleBarColors.length)];
 
 		if ('clipboard' in navigator) {
-			await navigator.clipboard.writeText(seedUrl.toString());
+			await navigator.clipboard.writeText(url.toString());
 
 			toast.push('Copied seed to clipboard!', {
 				theme: {
@@ -49,7 +66,7 @@
 	}
 </script>
 
-{#snippet area(name: AreaName)}
+{#snippet area(name: string)}
 	<div class="area">
 		<img
 			width="100"
@@ -94,7 +111,10 @@
 	</div>
 {/snippet}
 
-{#snippet shop(index: number, area: AreaName | undefined = undefined)}
+{#snippet shop(index: number, area: string | undefined = undefined)}
+	<div class="shop-label-bar">
+		<p class="shop-label">{area_to_name(area) ?? `Shop ${index}`}</p>
+	</div>
 	<div
 		class="shop"
 		style={area
@@ -180,7 +200,10 @@
 
 <article class="seed-entry" class:compact>
 	<header>
-		<h3>Seed {seed.id} ({playerCount}p)</h3>
+		<img class="inline-icon difficulty" src={"images/difficulty/" + difficulty_to_icon(settings.difficulty)} />
+		<h3>
+		<img class="inline-icon" src={"images/starting_area/" + starting_area_to_icon(settings.starting_area)} />
+			Seed {seed.id} ({playerCount}p)</h3>
 		<Tooltip.Provider delayDuration={0} disableCloseOnTriggerClick={false}>
 			<BnyTooltip triggerProps={{ class: 'share-button-root blank-button' }}>
 				{#snippet trigger()}
@@ -198,34 +221,30 @@
 		Areas {@render inlineIcon(`images/areas/${area_to_icon('extra_moonlit_prescipice')}.webp`)}
 	</h4>
 	<div class="area-list">
-		{@render area('extra_outskirts')}
-		<IconArrowFatRightFill class="area-arrow" />
 		{@render area(seed.areaName(0))}
 		<IconArrowFatRightFill class="area-arrow" />
 		{@render area(seed.areaName(1))}
 		<IconArrowFatRightFill class="area-arrow" />
 		{@render area(seed.areaName(2))}
 		<IconArrowFatRightFill class="area-arrow" />
-		{@render area('extra_pale_keep')}
+		{@render area(seed.areaName(3))}
+		<IconArrowFatRightFill class="area-arrow" />
+		{@render area(seed.areaName(4))}
 	</div>
-	<h4>Chests {@render inlineIcon('images/Shop-icon.png')}</h4>
+	<h4>Chests {@render inlineIcon('images/toybox.png')}</h4>
 	<div class="chest-list">
 		{@render chest(0, seed.chest(0), 'Outskirts 1')}
 		{@render chest(1, seed.chest(1), 'Outskirts 2')}
-		{@render chest(2, seed.chest(2, playerCount), seed.areaTitle(0))}
-		{@render chest(3, seed.chest(3, playerCount), seed.areaTitle(1))}
-		{@render chest(4, seed.chest(4, playerCount), seed.areaTitle(2))}
-		{@render chest(5, seed.chest(5, playerCount), 'Pale Keep')}
+		{@render chest(2, seed.chest(2, playerCount), seed.areaTitle(1))}
+		{@render chest(3, seed.chest(3, playerCount), seed.areaTitle(2))}
+		{@render chest(4, seed.chest(4, playerCount), seed.areaTitle(3))}
+		{@render chest(5, seed.chest(5, playerCount), seed.areaTitle(4))}
 	</div>
 	<h4>Shops {@render inlineIcon('images/coin.png')}</h4>
-	<p class="shop-label">{seed.areaName(0)}</p>
-	{@render shop(0, seed.areaName(0))}
-	<p class="shop-label">{seed.areaName(1)}</p>
-	{@render shop(1, seed.areaName(1))}
-	<p class="shop-label">{seed.areaName(2)}</p>
-	{@render shop(2, seed.areaName(2))}
-	<p class="shop-label">Pale Keep</p>
-	{@render shop(3, 'extra_pale_keep')}
+	{@render shop(0, seed.areaName(1))}
+	{@render shop(1, seed.areaName(2))}
+	{@render shop(2, seed.areaName(3))}
+	{@render shop(3, seed.areaName(4))}
 </article>
 
 <style>
@@ -251,6 +270,11 @@
 		color: var(--text-2);
 	}
 
+	.difficulty {
+  	// margin: 0.5em;
+  	height: 2em !important;
+	}
+
 	h4 {
 		margin-block: 1em 0.25em;
 		padding-bottom: 0.25rem;
@@ -264,6 +288,11 @@
 		border: var(--border-size-1) solid var(--surface-2);
 		border-radius: var(--radius-2);
 		box-shadow: var(--shadow-4);
+	}
+
+	.seed-entry header {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
 	}
 
 	.chest-label,

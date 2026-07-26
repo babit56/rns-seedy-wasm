@@ -1,5 +1,9 @@
 node_modules
+
+# Rust
 rnssp-wasm/target
+seed-json-creator/target
+seed-json-creator/*.json
 
 # Output
 .output

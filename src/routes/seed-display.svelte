@@ -39,7 +39,7 @@
 		const url = new URL(window.location.href);
 		url.searchParams.set('seed', String(seed.id));
 		if (settings.difficulty !== 3) {
-			url.searchParams.set('settings.difficulty', String(settings.difficulty));
+			url.searchParams.set('difficulty', String(settings.difficulty));
 		}
 		if (settings.starting_area !== StartingArea.RandomKingdom) {
 			url.searchParams.set('area', String(settings.starting_area));

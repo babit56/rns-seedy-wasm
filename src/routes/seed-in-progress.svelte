@@ -120,14 +120,14 @@
 	}));
 </script>
 
-<h2 class="page-title">Seed-In-Progress Finder</h2>
+<h2 class="page-title">Seed-In-Progress Searcher</h2>
 <div class="columns">
 	<section class="prose">
 		<h3>About</h3>
 		<p>
-			This tool allows you to find your <strong>current seed</strong> in a Hard or Lunar difficulty run.
-			Loot and shops are generated separately, so you need one chest of loot to figure out chests and
-			one shop to figure out shops
+			This tool allows you to find your <strong>current seed</strong> in a run.
+			Loot and (shops and areas and encounters) are generated separately, so you need one chest of loot to figure out chests and
+			one of the last three to figure out the rest
 		</p>
 		<h3>Usage</h3>
 		<p>

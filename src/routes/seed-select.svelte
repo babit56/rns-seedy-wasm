@@ -55,7 +55,8 @@
 		<h3>About</h3>
 		<p>
 			This tool lets you display <strong>a given seed</strong> based on the given settings.
-			Any seed can be input, but behavior might be wrong for seeds close to and above the 32-bit signed integer limit (~2 billion)
+			Any seed can be input, but behavior might be funky for large seeds.
+			The seed in the results will always match <strong>a</strong> correct seed ingame
 		</p>
 		<h3>Usage</h3>
 		<p>Type in the seed.</p>

@@ -88,7 +88,7 @@
 							<li>Starting areas change areas, shops, and encounters</li>
 							<li>Hard/Lunar spawns a Regeneration potion in the first shop and therefore affects that shop</li>
 							<li>Finally, item set unlocks change loot generation</li>
-							<li>Seed data must be loaded for the in-progress and end screen searchers.</li>
+							<li>Seed data must be loaded for use in searchers. Finder does not need loading</li>
 						</ul>
 					</Dialog.Description>
 				</section>

@@ -136,8 +136,7 @@
 	<section class="prose">
 		<h3>About</h3>
 		<p>
-			This tool allows you to find your <strong>a seed given items and areas</strong> in a Hard or Lunar
-			difficulty run, for if you have the end screen but not a specific chest.
+			This tool allows you to find a seed <strong>given items and areas</strong> from the end screen of a run
 		</p>
 		<p>
 			This currently does not account for skipped items, so find someone who got an item at every
@@ -151,7 +150,7 @@
 			possible seeds or by gem availability in shops.
 		</p>
 		<p>
-			To find seeds with specific parameters, enter them. E.g. you can find seeds with a Mountain
+			You can also try to find potentially wanted seeds. E.g. you can search for seeds with a Mountain
 			Staff in the first chest and a Ruby Special available somewhere in the run.
 		</p>
 	</section>

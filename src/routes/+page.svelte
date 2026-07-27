@@ -19,6 +19,11 @@
 		let resource = 'data/rand-area-0-highdiff.json';
 		if (settingsHavePrecalc(settings)) {
 			resource = getPrecalcFile(settings);
+		} else {
+			// Set current settings to default
+			settings.difficulty = 3;
+			settings.starting_area = StartingArea.RandomKingdom;
+			settings.unlocks = Unlocks.full();
 		}
 		seed_data = await (await fetch(resource)).json(); // Static assets makes the IDE happy
 		loading = false;
@@ -115,7 +120,7 @@
 <Tabs.Root bind:value={currentTab}>
 	<Tabs.List class="tab-list">
 		<Tabs.Trigger value="progress" class="outlined-button tab-button">
-			Seed-In-Progress Finder
+			Seed-In-Progress Searcher
 		</Tabs.Trigger>
 		<Tabs.Trigger value="select" class="outlined-button tab-button">
 			Direct Seed Finder
